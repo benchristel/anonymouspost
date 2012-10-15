@@ -1,4 +1,9 @@
 class PostsController < ApplicationController
+  include Authentication
+  
+  before_filter :decrypt_user_key!
+  before_filter :authenticate!
+  
   # GET /posts
   # GET /posts.json
   def index
@@ -34,7 +39,18 @@ class PostsController < ApplicationController
 
   # GET /posts/1/edit
   def edit
+    user = User.find_by_key(params[:id])
     @post = Post.find(params[:id])
+    respond_to do |format|
+      format.json {
+        unless User.owns_post?(@post)
+          render(:status => 401)
+        else
+          render(:json => @post)
+        end
+      }
+    end
+    
   end
 
   # POST /posts
@@ -44,10 +60,8 @@ class PostsController < ApplicationController
 
     respond_to do |format|
       if @post.save
-        format.html { redirect_to @post, notice: 'Post was successfully created.' }
         format.json { render json: @post, status: :created, location: @post }
       else
-        format.html { render action: "new" }
         format.json { render json: @post.errors, status: :unprocessable_entity }
       end
     end
@@ -56,14 +70,13 @@ class PostsController < ApplicationController
   # PUT /posts/1
   # PUT /posts/1.json
   def update
+    
     @post = Post.find(params[:id])
 
     respond_to do |format|
       if @post.update_attributes(params[:post])
-        format.html { redirect_to @post, notice: 'Post was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
         format.json { render json: @post.errors, status: :unprocessable_entity }
       end
     end
@@ -76,7 +89,6 @@ class PostsController < ApplicationController
     @post.destroy
 
     respond_to do |format|
-      format.html { redirect_to posts_url }
       format.json { head :no_content }
     end
   end
