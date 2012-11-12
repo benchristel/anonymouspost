@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   end
   
   def can_post?
-    Time.new > posting_allowed_after
+    Time.new.to_i > posting_allowed_after
   end
   
   def post!(post)

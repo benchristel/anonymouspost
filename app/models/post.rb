@@ -46,8 +46,8 @@ class Post < ActiveRecord::Base
     else
       multiplier = (v*c)+1
     end
-    vote_total = v
-    vote_multiplier = multiplier
+    self.vote_total = v
+    self.vote_multiplier = multiplier
     save!
   end
   

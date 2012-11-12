@@ -55,4 +55,49 @@ describe Post do
       end
     end
   end
+  
+  describe "#vote!" do
+    context "with delta = 1" do
+      it "adjusts vote total and multiplier" do
+        p = Post.create(good_attrs)
+        p.vote! 1
+        p.vote_total.should eq 1
+        p.vote_multiplier.should eq 1.25
+      end
+    end
+    
+    context "with delta = -1" do
+      it "adjusts vote total and multiplier" do
+        p = Post.create(good_attrs)
+        p.vote! -1
+        p.vote_total.should eq -1
+        p.vote_multiplier.should eq Math.exp(-0.25)
+      end
+    end
+    
+    context "with delta = 0" do
+      it "has no effect" do
+        p = Post.create(good_attrs)
+        p.vote! 0
+        p.vote_total.should eq 0
+        p.vote_multiplier.should eq 1
+      end
+    end
+    
+    context "with delta = 2" do
+      it "increments by 2" do
+        p = Post.create(good_attrs)
+        p.vote! 2
+        p.vote_total.should eq 2
+      end
+    end
+    
+    context "with delta = -2" do
+      it "decrements by 2" do
+        p = Post.create(good_attrs)
+        p.vote! -2
+        p.vote_total.should eq -2
+      end
+    end
+  end
 end

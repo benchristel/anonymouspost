@@ -35,4 +35,14 @@ describe User do
       end
     end
   end
+  
+  describe ".can_post?" do
+    context "before the cooldown period ends" do
+      it "returns false" do
+        u = User.last
+        u.post!(Post.create(:content => "hello", :latitude => 44, :longitude => 122, :user_key => "validkey") )
+        u.can_post?.should eq false
+      end
+    end
+  end
 end

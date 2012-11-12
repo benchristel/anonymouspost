@@ -1,4 +1,6 @@
 Anonymouspost::Application.routes.draw do
+  resources :votes
+
   resources :posts
 
   # The priority is based upon order of creation:
