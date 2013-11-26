@@ -1,33 +1,28 @@
 class User < ActiveRecord::Base
   include Encryption
-  
+
   attr_accessible :key
-  
+  attr_accessor :key, :longitude, :latitude
+
   validates_presence_of :key_hash
   validates_length_of :key_hash, :minimum => 64, :maximum => 64
   
+  after_initialize :set_location
+  
+  def set_location
+    self.longitude ||= -122
+    self.latitude  ||= 37
+  end
+  
+  def self.find_or_create_by_key(key)
+    puts "find #{key}"
+    find_by_key(key) || create!(:key => key)
+  end
+  
   def key=(key)
+    @key = key
     self.key_hash = User.sha(key)
-  end
-  
-  def has_key?(key)
-    key_hash == User.sha(key)
-  end
-  
-  def can_post?
-    Time.new.to_i > posting_allowed_after
-  end
-  
-  def post!(post)
-    self.posting_allowed_after = Time.new.to_i + post.content.length / 6
-  end
-  
-  def can_vote_on_post?(key, post, direction)
-    Vote.find_by_hash_components(key, post, direction).nil?
-  end
-  
-  def self.owns_post?(key, post)
-    Post.hash == sha(key + Post.timestamp.to_s)
+    puts "key hash = #{key_hash}"
   end
   
   def self.exists_with_key?(key)
