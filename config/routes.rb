@@ -1,7 +1,13 @@
 Anonymouspost::Application.routes.draw do
-  resources :votes
+  resources :votes 
 
-  resources :posts
+  resources :posts do
+    member do
+      put 'upvote'
+      put 'downvote'
+      put 'unvote'
+    end
+  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

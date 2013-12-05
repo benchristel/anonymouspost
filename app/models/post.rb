@@ -28,7 +28,12 @@ class Post < ActiveRecord::Base
     raise NoMethodError
   end
   
-  def belongs_to?(user_key)
-    xash == Post.sha(user_key + timestamp.to_s)
+  def belongs_to?(user)
+    user = user.key if user.is_a? User
+    xash == Post.sha(user + timestamp.to_s)
+  end
+  
+  def votes
+    vote_total
   end
 end

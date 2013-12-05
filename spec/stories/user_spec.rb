@@ -13,15 +13,16 @@ describe 'As a User,' do
     
     it "finds the existing User record" do
       expect{ Odin.sign_in(user_key) }.not_to change { User.count }
-      expect( Odin.sign_in(user_key) ).to be_a User
+      expect( Odin.sign_in(user_key).user ).to be_a User
     end
   end
   
   context 'when I post, it' do
-    let(:message) { 'i fell asleep' }
+    let(:content) { 'i fell asleep' }
+    let(:me) { Odin.sign_in(user_key) }
+    
     let(:post) do
-      Odin.sign_in(user_key)
-      Odin.post(:content => message, :user_key => user_key, :longitude => 123, :latitude => 34)
+      me.post(:content => content)
     end
     
     it "creates a post" do
@@ -29,11 +30,57 @@ describe 'As a User,' do
     end
     
     it "persists the message" do
-      post.content.should == message
+      post.content.should == content
     end
     
-    it 'makes me the owner of the post' do
-      expect(Odin.delete(post.id, user_key)).to be_true
+    it 'lets me delete the post' do
+      expect(me.delete(post.id)).to be_true
+    end
+    
+    it "doesn't let any other user delete the post" do
+      evil_guy = Odin.sign_in('crackmonkey79')
+      expect(evil_guy.delete(post.id)).not_to be_true
+    end
+    
+    it "lets anyone vote on the post" do
+      mom = Odin.sign_in('moom1234')
+      expect(mom.upvote(post.id)).to be_true
+    end
+  end
+  
+  context "when I vote on a post, it" do
+    let(:content) { 'i fell asleep' }
+    let(:me)    { Odin.sign_in('user1') }
+    let(:user2) { Odin.sign_in('user2') }
+    let(:user3) { Odin.sign_in('user3') }
+    
+    let(:post) do
+      Odin.sign_in('otheruser').post(:content => content)
+    end
+    
+    it "changes the vote count" do
+      expect { me.upvote(post.id) }.to change { post.reload.votes }.by(1)
+    end
+    
+    it "doesn't record duplicate votes" do
+      me.upvote(post.id)
+      expect { me.upvote(post.id) }.not_to change { post.reload.votes }
+    end
+    
+    it "lets me change my vote" do
+      me.upvote(post.id)
+      expect { me.downvote(post.id) }.to change { post.reload.votes }.from(1).to(-1)
+    end
+    
+    it "lets me remove my vote" do
+      me.upvote(post.id)
+      expect { me.unvote(post.id) }.to change { post.reload.votes }.to(0)
+    end
+    
+    it "lets others vote" do
+      me.upvote(post.id)
+      expect { user2.upvote(post.id) }.to change { post.reload.votes }.by(1)
+      expect { user3.downvote(post.id) }.to change { post.reload.votes }.by(-1)
     end
   end
 end

@@ -56,12 +56,54 @@ class PostsController < ApplicationController
   # POST /posts
   # POST /posts.json
   def create
-    @post = Post.new(params[:post])
-
+    @post = Odin.sign_in(params[:user_key]).post(:content => params[:content])
+  
     respond_to do |format|
-      if @post.save
+      if @post
         format.json { render json: @post, status: :created, location: @post }
       else
+        format.json { render json: @post.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+  
+  def upvote
+    @vote = Odin.sign_in(params[:user_key]).upvote(params[:id])
+    @post = Post.find_by_id(params[:id])
+    respond_to do |format|
+      if @post
+        format.html { redirect_to @post, notice: 'Vote was successfully created.' }
+        format.json { render json: @post, status: :created, location: @post }
+      else
+        format.html { render action: "new" }
+        format.json { render json: @post.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+  
+  def downvote
+    @vote = Odin.sign_in(params[:user_key]).downvote(params[:id])
+    @post = Post.find_by_id(params[:id])
+    respond_to do |format|
+      if @post
+        format.html { redirect_to @post, notice: 'Vote was successfully created.' }
+        format.json { render json: @post, status: :created, location: @post }
+      else
+        format.html { render action: "new" }
+        format.json { render json: @post.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+  
+  def unvote
+    @vote = Odin.sign_in(params[:user_key]).unvote(params[:id])
+    @post = Post.find_by_id(params[:id])
+    respond_to do |format|
+      if @post
+        format.html { redirect_to @post, notice: 'Vote was successfully created.' }
+        format.json { render json: @post, status: :created, location: @post }
+      else
+        format.html { render action: "new" }
         format.json { render json: @post.errors, status: :unprocessable_entity }
       end
     end

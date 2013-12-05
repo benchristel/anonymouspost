@@ -36,11 +36,11 @@ class VotesController < ApplicationController
   def edit
     @vote = Vote.find(params[:id])
   end
-
+  
   # POST /votes
   # POST /votes.json
   def create
-    @vote = Vote.new(params[:vote])
+    @vote = Odin.sign_in(params[:user_key]).vote()
 
     respond_to do |format|
       if @vote.save
@@ -52,6 +52,24 @@ class VotesController < ApplicationController
       end
     end
   end
+  
+  def upvote
+    
+    Odin.sign_in(params[:user_key]).upvote(params[:id])
+    
+    puts params.inspect
+    
+    respond_to do |format|
+      if @post = Post.find(params[:id])
+        format.html { redirect_to @post, notice: 'Vote was successfully created.' }
+        format.json { render json: @post, status: :created, location: @post }
+      else
+        format.html { render action: "new" }
+        format.json { render json: @post.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
 
   # PUT /votes/1
   # PUT /votes/1.json

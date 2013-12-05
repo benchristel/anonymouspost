@@ -4,34 +4,40 @@ class Vote < ActiveRecord::Base
   
   attr_accessible :xash
   
+  # returns the amount by which the vote total was adjusted
   def self.vote!(user_key, post, direction)
-    return false unless User.find_by_key user_key
+    vote_delta = 0
+    
+    return 0 unless User.find_by_key user_key
     direction = 1 if direction > 0
     direction = -1 if direction < 0
     
+    upvote_to_undo   = find_by_hash_components(user_key, post, 1)
+    downvote_to_undo = find_by_hash_components(user_key, post, -1)
     
-    xash = Vote.generate_hash(user_key, post, direction)
-    
-    if Vote.find_by_xash(xash).nil?
-      #user can vote on this post
-      if direction != 0
-        reverse_vote_hash = Vote.generate_hash(user_key, post, -direction)
-        v = Vote.create(:xash => xash)
-        post.vote! direction * (1 + Vote.delete_all(:xash => reverse_vote_hash))
-      else
-        # set vote back to neutral
-        post.vote!(1) if Vote.delete_all(:xash => Vote.generate_hash(user_key, post, -1)) > 0
-        post.vote!(-1) if Vote.delete_all(:xash => Vote.generate_hash(user_key, post, 1)) > 0
-      end
-      true
-    else
-      #user already voted this post in this direction
-      false
+    if upvote_to_undo
+      vote_delta -= 1
+      upvote_to_undo.destroy
     end
+    
+    if downvote_to_undo
+      vote_delta += 1
+      downvote_to_undo.destroy
+    end
+    
+    if direction != 0
+      new_vote = create_by_hash_components(user_key, post, direction)
+      vote_delta += direction
+    end
+    vote_delta
   end
   
-  def find_by_hash_components(user_key, post, direction)
+  def self.find_by_hash_components(user_key, post, direction)
     Vote.find_by_xash(Vote.generate_hash(user_key, post, direction))
+  end
+  
+  def self.create_by_hash_components(user_key, post, direction)
+    Vote.create(:xash => Vote.generate_hash(user_key, post, direction))
   end
   
   private

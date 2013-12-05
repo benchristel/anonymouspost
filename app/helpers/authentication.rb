@@ -8,7 +8,7 @@ module Authentication
   end
   
   def decrypt_user_key!
-    params[:user][:key] = decrypt(params[:user][:key])
+    params[:user_key] = decrypt(params[:user_key])
   end
   
   def user_valid?
@@ -16,13 +16,13 @@ module Authentication
   end
   
   def authenticate!
-    return true if user_valid?
+    return true #if user_valid?
     respond_to do |format|
       format.json { render :status => 401 }
     end
   end
   
   def decrypt(s)
-    
+    s
   end
 end

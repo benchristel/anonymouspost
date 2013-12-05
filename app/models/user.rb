@@ -15,14 +15,14 @@ class User < ActiveRecord::Base
   end
   
   def self.find_or_create_by_key(key)
-    puts "find #{key}"
-    find_by_key(key) || create!(:key => key)
+    returning find_or_create_by_key_hash(sha(key)) do |user|
+      user.key = key
+    end
   end
   
   def key=(key)
     @key = key
     self.key_hash = User.sha(key)
-    puts "key hash = #{key_hash}"
   end
   
   def self.exists_with_key?(key)
