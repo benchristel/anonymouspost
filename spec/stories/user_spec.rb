@@ -34,17 +34,14 @@ describe 'As a User,' do
     end
     
     it 'lets me delete the post' do
-      expect(me.delete(post.id)).to be_true
+      post
+      expect { me.delete(post.id) }.to change { Post.count }.from(1).to(0)
     end
     
     it "doesn't let any other user delete the post" do
+      post
       evil_guy = Odin.sign_in('crackmonkey79')
-      expect(evil_guy.delete(post.id)).not_to be_true
-    end
-    
-    it "lets anyone vote on the post" do
-      mom = Odin.sign_in('moom1234')
-      expect(mom.upvote(post.id)).to be_true
+      expect { evil_guy.delete(post.id) }.not_to change { Post.count }
     end
   end
   
@@ -81,6 +78,10 @@ describe 'As a User,' do
       me.upvote(post.id)
       expect { user2.upvote(post.id) }.to change { post.reload.votes }.by(1)
       expect { user3.downvote(post.id) }.to change { post.reload.votes }.by(-1)
+    end
+    
+    it "raises ActiveRecord::RecordNotFound if the post doesn't exist" do
+      expect { me.upvote(0) }.to raise_error ActiveRecord::RecordNotFound
     end
   end
 end

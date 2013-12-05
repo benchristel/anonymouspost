@@ -1,8 +1,5 @@
 class PostsController < ApplicationController
-  include Authentication
-  
-  before_filter :decrypt_user_key!
-  before_filter :authenticate!
+  before_filter :sign_in
   
   # GET /posts
   # GET /posts.json
@@ -39,7 +36,7 @@ class PostsController < ApplicationController
 
   # GET /posts/1/edit
   def edit
-    user = User.find_by_key(params[:id])
+    user = User.find_by_key(params[:user_key])
     @post = Post.find(params[:id])
     respond_to do |format|
       format.json {
@@ -56,7 +53,7 @@ class PostsController < ApplicationController
   # POST /posts
   # POST /posts.json
   def create
-    @post = Odin.sign_in(params[:user_key]).post(:content => params[:content])
+    @post = @me.post(:content => params[:content])
   
     respond_to do |format|
       if @post
@@ -68,7 +65,7 @@ class PostsController < ApplicationController
   end
   
   def upvote
-    @vote = Odin.sign_in(params[:user_key]).upvote(params[:id])
+    @vote = @me.upvote(params[:id])
     @post = Post.find_by_id(params[:id])
     respond_to do |format|
       if @post
@@ -127,8 +124,7 @@ class PostsController < ApplicationController
   # DELETE /posts/1
   # DELETE /posts/1.json
   def destroy
-    @post = Post.find(params[:id])
-    @post.destroy
+    @me.delete_post(params[:id])
 
     respond_to do |format|
       format.json { head :no_content }
