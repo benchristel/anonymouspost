@@ -26,6 +26,8 @@ class Odin
     end
   end
   
+  alias_method :delete_post, :delete
+  
   public
   def upvote(post_id)
     vote post_id, 1
@@ -44,11 +46,11 @@ class Odin
   private
   def vote(post_id, direction)
     ActiveRecord::Base.transaction do
-      post = Post.find post_id
-      change = Vote.vote!(user.key, post, direction)
-      post.vote_total += change
-      post.save!
+      Post.find(post_id).tap do |post|
+        delta = Vote.vote!(user.key, post, direction)
+        post.vote_total += delta
+        post.save!
+      end
     end
-    true
   end
 end
