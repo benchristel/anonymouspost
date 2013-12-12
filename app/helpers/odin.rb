@@ -1,25 +1,20 @@
 class Odin
-  attr_accessor :user, :longitude, :latitude
+  attr_accessor :user
   
   def self.sign_in(user_key)
     user = User.find_or_create_by_key(user_key)
-    self.new(:user => user, :longitude => -122, :latitude => 33)
+    self.new(:user => user)
   end
   
   def initialize(options={})
     self.user      = options[:user]
-    self.longitude = options[:longitude]
-    self.latitude  = options[:latitude]
   end
   
   public
   def post(options={})
     options = options.reverse_merge(
-      :user_key  => user.key,
-      :longitude => longitude,
-      :latitude  => latitude
-    )
-      
+      :user_key  => user.key
+    )  
     Post.create!(options)
   end
   

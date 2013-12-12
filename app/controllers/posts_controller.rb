@@ -1,4 +1,4 @@
-class PostsController < ApplicationController
+1212q aclass PostsController < ApplicationController
   include Authentication
   
   before_filter :decrypt_user_key!
@@ -55,12 +55,14 @@ class PostsController < ApplicationController
 
   # POST /posts
   # POST /posts.json
+  #
   def create
-    @post = Odin.sign_in(params[:user_key]).post(:content => params[:content])
+    @post = Odin.sign_in(params[:user_key]).post(:content => params[:content], :longitude => params[:longitude], :latitude => params[:latitude])
   
     respond_to do |format|
       if @post
         format.json { render json: @post, status: :created, location: @post }
+        #format.js   {}
       else
         format.json { render json: @post.errors, status: :unprocessable_entity }
       end
@@ -74,6 +76,7 @@ class PostsController < ApplicationController
       if @post
         format.html { redirect_to @post, notice: 'Vote was successfully created.' }
         format.json { render json: @post, status: :created, location: @post }
+        #format.js   {}
       else
         format.html { render action: "new" }
         format.json { render json: @post.errors, status: :unprocessable_entity }
@@ -88,6 +91,7 @@ class PostsController < ApplicationController
       if @post
         format.html { redirect_to @post, notice: 'Vote was successfully created.' }
         format.json { render json: @post, status: :created, location: @post }
+        #format.js   {}
       else
         format.html { render action: "new" }
         format.json { render json: @post.errors, status: :unprocessable_entity }
