@@ -22,7 +22,7 @@ describe 'As a User,' do
     let(:me) { Odin.sign_in(user_key) }
     
     let(:post) do
-      me.post(:content => content)
+      me.post(:content => content, :longitude => -122, :latitude => 33)
     end
     
     it "creates a post" do
@@ -52,7 +52,7 @@ describe 'As a User,' do
     let(:user3) { Odin.sign_in('user3') }
     
     let(:post) do
-      Odin.sign_in('otheruser').post(:content => content)
+      Odin.sign_in('otheruser').post(:content => content, :longitude => -122, :latitude => 33)
     end
     
     it "changes the vote count" do

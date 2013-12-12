@@ -1,13 +1,5 @@
-<<<<<<< HEAD
-1212q aclass PostsController < ApplicationController
-  include Authentication
-  
-  before_filter :decrypt_user_key!
-  before_filter :authenticate!
-=======
 class PostsController < ApplicationController
   before_filter :sign_in
->>>>>>> efda56a4bb2140a0e3d1edf2c295d71032d2dd95
   
   # GET /posts
   # GET /posts.json
