@@ -20,18 +20,12 @@
     <%= f.text_field :user_key %>
   </div>
   <div class="field">
-    <%= f.label :timestamp %><br />
-    <%= f.number_field :timestamp %>
+    <%= f.hidden_field :latitude %>
   </div>
   <div class="field">
-    <%= f.label :longitude %><br />
-    <%= f.text_field :longitude %>
+    <%= f.hidden_field :longitude %>
   </div>
-  <div class="field">
-    <%= f.label :latitude %><br />
-    <%= f.text_field :latitude %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
+   <div class="action">
+    <input type="button" value="Submit!" onclick="locateAndSubmit();" />
   </div>
 <% end %>
