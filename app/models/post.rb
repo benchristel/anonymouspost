@@ -4,6 +4,11 @@ class Post < ActiveRecord::Base
   
   attr_accessible :content, :latitude, :longitude, :user_key
   
+  has_many :votes, :dependent => :delete_all
+  
+  after_initialize :set_vote_total
+  before_save      :set_vote_total
+  
   validates_presence_of :timestamp
   validates_presence_of :xash
   validates_length_of :xash, :minimum => 64, :maximum => 64
@@ -33,7 +38,12 @@ class Post < ActiveRecord::Base
     xash == Post.sha(user + timestamp.to_s)
   end
   
-  def votes
-    vote_total
+  VOTE_MULTIPLIER_CONSTANT = 0.25
+  private
+  def set_vote_total
+    self.vote_total = votes.sum(:value)
+    self.vote_multiplier = vote_total < 0 ?
+        Math::E**(vote_total*VOTE_MULTIPLIER_CONSTANT) :
+        (vote_total*VOTE_MULTIPLIER_CONSTANT)+1
   end
 end

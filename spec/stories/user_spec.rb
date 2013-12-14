@@ -56,28 +56,28 @@ describe 'As a User,' do
     end
     
     it "changes the vote count" do
-      expect { me.upvote(post.id) }.to change { post.reload.votes }.by(1)
+      expect { me.upvote(post.id) }.to change { post.reload.vote_total }.by(1)
     end
     
     it "doesn't record duplicate votes" do
       me.upvote(post.id)
-      expect { me.upvote(post.id) }.not_to change { post.reload.votes }
+      expect { me.upvote(post.id) }.not_to change { post.reload.vote_total }
     end
     
     it "lets me change my vote" do
       me.upvote(post.id)
-      expect { me.downvote(post.id) }.to change { post.reload.votes }.from(1).to(-1)
+      expect { me.downvote(post.id) }.to change { post.reload.vote_total }.from(1).to(-1)
     end
     
     it "lets me remove my vote" do
       me.upvote(post.id)
-      expect { me.unvote(post.id) }.to change { post.reload.votes }.to(0)
+      expect { me.unvote(post.id) }.to change { post.reload.vote_total }.to(0)
     end
     
     it "lets others vote" do
       me.upvote(post.id)
-      expect { user2.upvote(post.id) }.to change { post.reload.votes }.by(1)
-      expect { user3.downvote(post.id) }.to change { post.reload.votes }.by(-1)
+      expect { user2.upvote(post.id) }.to change { post.reload.vote_total }.by(1)
+      expect { user3.downvote(post.id) }.to change { post.reload.vote_total }.by(-1)
     end
     
     it "raises ActiveRecord::RecordNotFound if the post doesn't exist" do

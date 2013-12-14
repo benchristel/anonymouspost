@@ -3,9 +3,12 @@ anonymouspost
 
 ## TODO
 
-- write the query to get nearby posts, ranked by relevance (votes, newness, distance)
-- some sort of very basic frontend that hits the JSON api with JS and AJAX
+- display only nearby posts in the list
+- rank posts by relevance (votes, newness, distance)
+- allow users to vote on posts
 - allow users to edit their posts
+- allow users to delete their posts
+- UI for adjusting max distance of posts to display
 
 ## Cool Ideas
 

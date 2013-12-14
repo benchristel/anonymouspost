@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120916145836) do
+ActiveRecord::Schema.define(:version => 20131214222005) do
 
   create_table "posts", :force => true do |t|
     t.string   "content",         :limit => 720
@@ -34,6 +34,8 @@ ActiveRecord::Schema.define(:version => 20120916145836) do
     t.string   "xash",       :limit => 64, :null => false
     t.datetime "created_at",               :null => false
     t.datetime "updated_at",               :null => false
+    t.integer  "post_id"
+    t.integer  "value"
   end
 
 end
