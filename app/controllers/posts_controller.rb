@@ -54,7 +54,7 @@ class PostsController < ApplicationController
   # POST /posts.json
   #
   def create
-    @post = @me.post(:content => params[:content], :longitude => params[:longitude], :latitude => params[:latitude])  
+    @post = @me.post(:content => params[:post][:content], :longitude => params[:post][:longitude], :latitude => params[:post][:latitude])  
     respond_to do |format|
       if @post
         format.json { render json: @post, status: :created, location: @post }
@@ -66,8 +66,8 @@ class PostsController < ApplicationController
   end
   
   def upvote
-    @vote = @me.upvote(params[:id])
-    @post = Post.find_by_id(params[:id])
+    @vote = @me.upvote(params[:post][:id])
+    @post = Post.find_by_id(params[:post][:id])
     respond_to do |format|
       if @post
         format.html { redirect_to @post, notice: 'Vote was successfully created.' }
