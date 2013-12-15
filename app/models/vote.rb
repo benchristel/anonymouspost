@@ -44,7 +44,6 @@ class Vote < ActiveRecord::Base
   
   private
   def save_post
-    puts "saving post ========== #{post.inspect}"
     post.save!
   end
   

@@ -27,10 +27,8 @@ class Post < ActiveRecord::Base
   scope :by_relevance, lambda { |longitude, latitude, time=Time.now|
     order(<<-SQL)
       posts.vote_multiplier /
-      (
-        (1 + #{DISTANCE_FALLOFF_RATE} * (POW(posts.longitude - #{longitude.to_f},2) + POW(posts.latitude - #{latitude.to_f},2))) -- distance falloff
-        * POW(2, -#{POST_HALFLIFE_SECONDS} * (#{time.to_f} - posts.timestamp)) -- decay over time
-      )
+      (1 + #{DISTANCE_FALLOFF_RATE} * (POW(posts.longitude - #{longitude.to_f},2) + POW(posts.latitude - #{latitude.to_f},2))) -- distance falloff
+      * POW(2, -(#{time.to_f} - posts.timestamp) / #{POST_HALFLIFE_SECONDS}) -- decay over time
       DESC
     SQL
   }
@@ -52,9 +50,7 @@ class Post < ActiveRecord::Base
       meters_away_to_look *= 2
     end
     
-    scoped = Post.within(meters_away_to_look, of=longitude, latitude).by_relevance(longitude, latitude, time).limit(per_page).offset(per_page * (page - 1))
-    puts scoped.to_sql
-    scoped
+    Post.within(meters_away_to_look, of=longitude, latitude).by_relevance(longitude, latitude, time).limit(per_page).offset(per_page * (page - 1))
   end
   
   
@@ -75,7 +71,6 @@ class Post < ActiveRecord::Base
   VOTE_MULTIPLIER_CONSTANT = 0.25
   private
   def set_vote_total
-    puts "set vote total: #{votes.count} votes"
     self.vote_total = votes.sum(:value)
     self.vote_multiplier = vote_total < 0 ?
         Math::E**(vote_total*VOTE_MULTIPLIER_CONSTANT) :

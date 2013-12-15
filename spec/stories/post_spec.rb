@@ -14,9 +14,6 @@ describe 'when I view a list of posts, it' do
     me.post(:content => content, :longitude => longitude, :latitude => latitude)
     me.upvote(Post.last.id)
     
-    puts Post.count
-    puts Post.all.inspect
-    
     posts.first.vote_total.should == 1
     posts.last.vote_total.should == 0
   end
@@ -31,13 +28,17 @@ describe 'when I view a list of posts, it' do
   end
   
   it "displays new posts above old posts" do
-    me.post(:content => content, :longitude => longitude, :latitude => latitude)
-    me.post(:content => content, :longitude => longitude, :latitude => latitude)
+    me.post(:content => 'old', :longitude => longitude, :latitude => latitude)
+    sleep(2)
+    me.post(:content => 'new', :longitude => longitude, :latitude => latitude)
     
-    
+    posts.first.content.should == 'new'
   end
   
-  xit "displays nearby posts above distant posts" do
+  it "displays nearby posts above distant posts" do
+    me.post(:content => 'far', :longitude => longitude, :latitude => latitude + 1)
+    me.post(:content => 'near', :longitude => longitude, :latitude => latitude)
     
+    posts.first.content.should == 'near'
   end
 end
