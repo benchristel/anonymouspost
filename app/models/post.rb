@@ -1,13 +1,13 @@
 class Post < ActiveRecord::Base
   include Location
   include Encryption
+  include Caches
   
   attr_accessible :content, :latitude, :longitude, :user_key
   
   has_many :votes, :dependent => :delete_all
   
-  after_initialize :set_vote_total
-  before_save      :set_vote_total
+  before_save :set_vote_total
   
   validates_presence_of :timestamp
   validates_presence_of :xash
@@ -18,13 +18,16 @@ class Post < ActiveRecord::Base
   
   before_validation :before_validation_cb
   def before_validation_cb
-    self.timestamp = Time.new.to_i
-    self.xash = Post.sha(@temp_user_key.to_s + self.timestamp.to_s)
+    if timestamp.nil?
+      self.timestamp = Time.new.to_i
+      self.xash = Post.sha(@temp_user_key.to_s + self.timestamp.to_s)
+    end
   end
   
   DISTANCE_FALLOFF_RATE = 10000.0 # chosen arbitrarily for now
   POST_HALFLIFE_SECONDS = 3600 * 24.0
   scope :by_relevance, lambda { |longitude, latitude, time=Time.now|
+    includes(:votes).
     order(<<-SQL)
       posts.vote_multiplier /
       (1 + #{DISTANCE_FALLOFF_RATE} * (POW(posts.longitude - #{longitude.to_f},2) + POW(posts.latitude - #{latitude.to_f},2))) -- distance falloff
@@ -53,8 +56,6 @@ class Post < ActiveRecord::Base
     Post.within(meters_away_to_look, of=longitude, latitude).by_relevance(longitude, latitude, time).limit(per_page).offset(per_page * (page - 1))
   end
   
-  
-  
   def user_key=(key)
     @temp_user_key = key
   end
@@ -65,15 +66,69 @@ class Post < ActiveRecord::Base
   
   def belongs_to?(user)
     user = user.key if user.is_a? User
-    xash == Post.sha(user + timestamp.to_s)
+    xash == Post.sha(user.to_s + timestamp.to_s)
+  end
+  
+  def editable_by?(user)
+    belongs_to? user
+  end
+  
+  def vote_total
+    cached[:vote_total] ||= votes.sum(:value)
+  end
+  
+  def vote_multiplier
+    cached[:vote_multiplier] ||=
+    vote_total < 0 ?
+          Math::E**(vote_total*VOTE_MULTIPLIER_CONSTANT) :
+          (vote_total*VOTE_MULTIPLIER_CONSTANT)+1
+  end
+  
+  def direction(long, lat)
+    vector = [
+      longitude - long.to_f,
+      latitude  - lat.to_f,
+    ]
+    
+    return :HERE if Math.abs(vector[0]) < 0.001 && Math.abs(vector[1]) < 0.001
+    
+    { :N  => [ 0.0,    1.0  ],
+      :NE => [ 0.707,  0.707],
+      :E  => [ 1.0,    0.0  ],
+      :SE => [ 0.707, -0.707],
+      :S  => [ 0.0,   -1.0  ],
+      :SW => [-0.707, -0.707],
+      :W  => [-1.0,    0.0  ],
+      :NW => [-0.707,  0.707],
+      # CATSBY: Where do balloons go, Twisp?
+      # TWISP: *Away*.
+    }.inject([:AWAY, 1_000_000]) do |closest, k, v|
+      dist_squared = (vector[0] - v[0])**2 + (vector[1] - v[1])**2
+      if dist_squared < closest[1]
+        [k, dist_squared]
+      else
+        closest
+      end
+    end[0]
+  end
+  
+  def as_json
+    { :content     => content,
+      :longitude   => longitude,
+      :latitude    => latitude,
+      :netUpvotes  => vote_total,
+      :timestamp   => timestamp * 1000.0, # convert to milliseconds since that's what Javascript uses
+    }
   end
   
   VOTE_MULTIPLIER_CONSTANT = 0.25
   private
   def set_vote_total
-    self.vote_total = votes.sum(:value)
-    self.vote_multiplier = vote_total < 0 ?
-        Math::E**(vote_total*VOTE_MULTIPLIER_CONSTANT) :
-        (vote_total*VOTE_MULTIPLIER_CONSTANT)+1
+    @already_set_vote_total ||= begin
+      self.vote_total = votes.sum(:value)
+      self.vote_multiplier = vote_total < 0 ?
+          Math::E**(vote_total*VOTE_MULTIPLIER_CONSTANT) :
+          (vote_total*VOTE_MULTIPLIER_CONSTANT)+1
+    end
   end
 end

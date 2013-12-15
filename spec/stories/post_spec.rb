@@ -7,7 +7,7 @@ describe 'when I view a list of posts, it' do
   let(:latitude) { 33 }
   let(:content) { 'hi' }
   
-  subject(:posts) { me.list_posts_within(meters=100, of=longitude,latitude) }
+  subject(:posts) { me.list_posts_near(longitude, latitude) }
   
   it "displays upvoted posts above posts with no votes" do
     me.post(:content => content, :longitude => longitude, :latitude => latitude)

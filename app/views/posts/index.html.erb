@@ -1,13 +1,12 @@
 <h1>Listing posts</h1>
 
+<%= render 'form' %>
+
 <table>
   <tr>
     <th>Content</th>
-    <th>Hash</th>
-    <th>Timestamp</th>
     <th>Longitude</th>
     <th>Latitude</th>
-    <th></th>
     <th></th>
     <th></th>
   </tr>
@@ -15,13 +14,15 @@
 <% @posts.each do |post| %>
   <tr>
     <td><%= post.content %></td>
-    <td><%= post.xash %></td>
-    <td><%= post.timestamp %></td>
     <td><%= post.longitude %></td>
     <td><%= post.latitude %></td>
-    <td><%= link_to 'Show', post %></td>
-    <td><%= link_to 'Edit', edit_post_path(post) %></td>
-    <td><%= link_to 'Destroy', post, confirm: 'Are you sure?', method: :delete %></td>
+    <td><%=
+          #if post.editable_by_current_user?
+          #  link_to 'Edit', edit_post_path(post)
+          #end
+        %>
+    </td>
+    <td><%= link_to 'X', post, confirm: 'Are you sure?', method: :delete %></td>
   </tr>
 <% end %>
 </table>

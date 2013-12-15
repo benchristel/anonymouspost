@@ -1,23 +1,11 @@
 <%= form_for(@post, remote: true) do |f| %>
-  <% if @post.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@post.errors.count, "error") %> prohibited this post from being saved:</h2>
-
-      <ul>
-      <% @post.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
   <div class="field">
     <%= f.label :content %><br />
     <%= f.text_field :content %>
   </div>
   <div class="field">
     <%= f.label :user_key %><br />
-    <%= f.text_field :user_key %>
+    <%= f.password_field :user_key %>
   </div>
   <div class="field">
     <%= f.hidden_field :latitude %>
@@ -25,7 +13,7 @@
   <div class="field">
     <%= f.hidden_field :longitude %>
   </div>
-   <div class="action">
+  <div class="action">
     <input type="button" value="Submit!" onclick="locateAndSubmit();" />
   </div>
 <% end %>

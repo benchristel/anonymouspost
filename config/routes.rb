@@ -8,6 +8,7 @@ Anonymouspost::Application.routes.draw do
       put 'unvote'
     end
   end
+  get '/posts(/near/:longitude/:latitude)', :to => 'posts#index', :defaults => { format: 'html' }
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

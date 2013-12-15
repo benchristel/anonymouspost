@@ -2,13 +2,25 @@ class PostsController < ApplicationController
   before_filter :sign_in
   
   # GET /posts
+  # GET /posts/near/:longitude/:latitude
   # GET /posts.json
   def index
-    @posts = Post.all
+    if params[:longitude] && params[:latitude]
+      @posts = Odin.new.list_posts_near(params[:longitude].sub(/,/,'.').to_f, params[:latitude].sub(/,/,'.').to_f)
+    else
+      @posts = Post.last(30)
+    end
+    @post = Post.new
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @posts }
+      format.json do
+        presenters = @posts.map do |post|
+          PostsPresenter.new(post, params[:user_key], params[:longitude], params[:latitude])
+        end
+        
+        render :json => presenters
+      end
     end
   end
 

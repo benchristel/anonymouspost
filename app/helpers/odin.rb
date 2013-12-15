@@ -2,7 +2,7 @@ class Odin
   attr_accessor :user
   
   def self.sign_in(user_key)
-    user = User.find_or_create_by_key(user_key)
+    user = User.find_or_create_by_key(user_key.to_s)
     self.new(:user => user)
   end
   
@@ -11,7 +11,7 @@ class Odin
   end
   
   public
-  def list_posts_within(meters, longitude, latitude)
+  def list_posts_near(longitude, latitude)
     Post.most_relevant(100, near = longitude, latitude)
   end
   
