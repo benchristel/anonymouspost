@@ -5,6 +5,8 @@ class Vote < ActiveRecord::Base
   attr_accessible :xash, :value, :post
   
   belongs_to :post
+  after_save    :save_post
+  after_destroy :save_post
   
   # returns the amount by which the vote total was adjusted
   def self.vote!(user_key, post, direction)
@@ -41,7 +43,12 @@ class Vote < ActiveRecord::Base
   end
   
   private
+  def save_post
+    puts "saving post ========== #{post.inspect}"
+    post.save!
+  end
   
+  private
   def self.generate_hash(user_key, post)
     sha(user_key.to_s + post.id.to_s)
   end

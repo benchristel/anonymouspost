@@ -11,6 +11,11 @@ class Odin
   end
   
   public
+  def list_posts_within(meters, longitude, latitude)
+    Post.most_relevant(100, near = longitude, latitude)
+  end
+  
+  public
   def post(options={})
     options = options.reverse_merge(
       :user_key  => user.key
