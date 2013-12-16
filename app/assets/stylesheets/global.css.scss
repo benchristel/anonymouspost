@@ -7,16 +7,129 @@ html, body {
     background-color: #888;
     width: 100%;
     height: 100%;
+    font-family: Helvetica, sans-serif;
+}
+
+#formHeader {
+    width: 900px;
+    height: 100px;
+    position: fixed;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 18px;
+    background-color: #fff;
+    border-bottom: 3px solid #888;
+    z-index: 1;
+    
+    
+    textarea.content {
+        margin: 5px;
+        width: 888px;
+        height: 60px;
+        resize: none;
+    }
+    
+    #post {
+        input[type=submit] {
+            display: block;
+            margin-right: 5px;
+            margin-left: auto;
+        }
+    }
+    
+    form {
+        height: 100px;
+    }
+    
+    #sign_in {
+        margin-top: 20px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        
+        input[type=text], input[type=password] {
+            height: 20px;
+            font-size: 18px;
+        }
+    }
 }
 
 #content {
-    width: 600px;
-    height: 100%;
+    width: 900px;
     margin-left: auto;
     margin-right: auto;
-    font-family: Helvetica, sans-serif;
     font-size: 18px;
     background-color: #fff;
     border-left: 2px solid #666;
     border-right: 2px solid #666;
+}
+
+ol#posts {
+    padding-top: 100px;
+    li {
+        list-style-type: none;
+        padding: 5px;
+        margin-left: 5px;
+        margin-right: 5px;
+        border-bottom: 1px solid #888;
+        height: 60px;
+        
+        overflow-y: hidden;
+        
+        .distance {
+            display: inline;
+            color: #888;
+        }
+        .time {
+            display: inline;
+            color: #888;
+        }
+        .location {
+            display: inline;
+            color: #888;
+        }
+        .longitude {
+            display: inline;
+        }
+        .latitude {
+            display: inline;
+        }
+        .content {
+            width: 100%;
+            font-size: 16px;
+            white-space: pre-line;
+        }
+        .vote {
+            float: left;
+            height: inherit;
+            width: 60px;
+        }
+        .vote_up {
+            background-image: url('/arrowup.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            position: relative;
+            height: 16px;
+            width: inherit;
+            z-index: 0;
+            cursor: pointer;
+        }
+        .vote_down {
+            background-image: url('/arrowdown.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            position: relative;
+            height: 16px;
+            width: inherit;
+            z-index: 0;
+            cursor: pointer;
+        }
+        .vote_total {
+            width: inherit;
+            height: 28px;
+            text-align: center;
+            line-height: 28px;
+            font-size: 24px;
+        }
+    }
 }

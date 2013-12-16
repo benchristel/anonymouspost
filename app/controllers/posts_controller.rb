@@ -69,7 +69,14 @@ class PostsController < ApplicationController
     @post = @me.post(:content => params[:post][:content], :longitude => params[:post][:longitude], :latitude => params[:post][:latitude])  
     respond_to do |format|
       if @post
-        format.json { render json: @post, status: :created, location: @post }
+        format.json do
+          render json: PostsPresenter.new(
+            @post,
+            params[:user_key],
+            params[:post][:longitude],
+            params[:post][:latitude]
+          ), status: :created, location: @post
+        end
         #format.js   {}
       else
         format.json { render json: @post.errors, status: :unprocessable_entity }
@@ -78,8 +85,8 @@ class PostsController < ApplicationController
   end
   
   def upvote
-    @vote = @me.upvote(params[:post][:id])
-    @post = Post.find_by_id(params[:post][:id])
+    @vote = @me.upvote(params[:id])
+    @post = Post.find_by_id(params[:id])
     respond_to do |format|
       if @post
         format.html { redirect_to @post, notice: 'Vote was successfully created.' }
@@ -93,7 +100,7 @@ class PostsController < ApplicationController
   end
   
   def downvote
-    @vote = Odin.sign_in(params[:user_key]).downvote(params[:id])
+    @vote = @me.downvote(params[:id])
     @post = Post.find_by_id(params[:id])
     respond_to do |format|
       if @post

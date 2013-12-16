@@ -84,6 +84,17 @@ class Post < ActiveRecord::Base
           (vote_total*VOTE_MULTIPLIER_CONSTANT)+1
   end
   
+  def as_json(*args)
+    { :net_upvotes => vote_total,
+      :content     => content,
+      :created_at  => created_at,
+      :updated_at  => updated_at,
+      :longitude   => longitude,
+      :latitude    => latitude,
+      :id          => id
+    }
+  end
+  
   def direction(long, lat)
     vector = [
       longitude - long.to_f,
@@ -110,15 +121,6 @@ class Post < ActiveRecord::Base
         closest
       end
     end[0]
-  end
-  
-  def as_json
-    { :content     => content,
-      :longitude   => longitude,
-      :latitude    => latitude,
-      :netUpvotes  => vote_total,
-      :timestamp   => timestamp * 1000.0, # convert to milliseconds since that's what Javascript uses
-    }
   end
   
   VOTE_MULTIPLIER_CONSTANT = 0.25

@@ -13,7 +13,7 @@ class PostsPresenter
     post.as_json.merge(
       :distance  => distance,
       :direction => direction,
-      :canEdit   => can_edit?
+      :can_edit   => can_edit?
     )
   end
   
