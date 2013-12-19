@@ -49,7 +49,7 @@ class Post < ActiveRecord::Base
   def self.most_relevant(desired_number_of_posts, longitude, latitude, time=Time.now, page=1, per_page=desired_number_of_posts)
     meters_away_to_look = 100
     while Post.within(meters_away_to_look, of=longitude, latitude).count < desired_number_of_posts &&
-          meters_away_to_look < 10_000
+          meters_away_to_look < 5_000
       meters_away_to_look *= 2
     end
     
