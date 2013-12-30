@@ -8,6 +8,7 @@ angular.module('AnonymousApp').controller 'PostController', ($scope, Post, Sessi
                 console.log 'about to apply'
                 $scope.posts = posts
                 console.log $scope.posts
+                $scope.$apply()
 
     $scope.createPost = ->
         raise 'not signed in' unless Session.signedIn
