@@ -1,25 +1,32 @@
-angular.module('AnonymousApp').factory('Location', ($resource) ->
+angular.module('AnonymousApp').factory('Location', ($resource, $q) ->
     {
         longitude: 0
         latitude: 0
+        lastUpdate: 0
         
-        getLocation: ->
-            deferred = $.Deferred();
+        getLocation: (invalidateCacheAfterMs=10000)->
+            deferred = $q.defer();
+            
+            if new Date().getTime() - @lastUpdate < invalidateCacheAfterMs
+                deferred.resolve(this)
+                return deferred.promise
+            
             if navigator.geolocation
                 navigator.geolocation.getCurrentPosition(
                     onSuccess = (position) =>
-                        console.log position
-                        this.longitude = position.coords.longitude
-                        this.latitude = position.coords.latitude
+                        @lastUpdate = new Date().getTime()
+                        @longitude = position.coords.longitude
+                        @latitude = position.coords.latitude
                         deferred.resolve(this)
-                    , onFailure = () ->
+                    ,
+                    onFailure = () ->
+                        deferred.fail()
                         alert "Couldn't find your position."
                 )
-            
-                deferred.promise();
             else
-                deferred.resolve(null)
+                deferred.reject()
                 alert "Your browser doesn't support geolocation."
-            deferred.promise();
+            
+            deferred.promise
     }
 )

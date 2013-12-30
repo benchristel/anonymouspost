@@ -5,11 +5,7 @@ angular.module('AnonymousApp').factory('Post', ($resource) ->
             
         
         all: (longitude, latitude) ->
-            #deferred = $.Deferred()
-            
-            r = @service.query(longitude: longitude, latitude: latitude)
-            console.log r
-            r
+            @service.query(longitude: longitude, latitude: latitude)
             
             
             
