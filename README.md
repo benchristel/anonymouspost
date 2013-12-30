@@ -29,3 +29,10 @@ anonymouspost
 - Editing posts
 - UI for adjusting max distance of posts to display
 - each user ID can have an optional public component, which is separated from the private part of the ID with a special character (`+` or something). The plaintext of the public component is not displayed. Instead, it is hashed and the hash is used to generate an abstract avatar (similar to the Github avatars) that is displayed with posts. This makes it impossible for a user to steal another's public tag, so users (or groups of users who share a public component between them) can sign their posts anonymously.
+
+## Contributing
+
+1. Fork this repo and make your changes.
+2. Run the tests with `bundle exec rspec spec` to make sure nothing's broken.
+3. Submit a pull request.
+4. Wait 1000 years.
