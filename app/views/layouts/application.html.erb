@@ -9,9 +9,9 @@
 </head>
 <body>
 
-<div id="app-container" ng-controller="SessionController">
+<div id="app-container" ng-controller="PostController">
   <div id="form-header">
-    <div id="sign-in-form" class="visible-{{ !isSignedIn() }}">
+    <div id="sign-in-form" ng-controller="SessionController" class="visible-{{ !isSignedIn() }}">
       <form ng-submit="signIn()">
         <input type="text" class="username" placeholder="username" ng-model="inputUsername"></input><input type="password" class="password" placeholder="password" ng-model="inputPassword"></input><input type="submit" value="Sign In"></input>
       </form>
@@ -21,7 +21,7 @@
       </p>
     </div>
     <div id="post-form" class="visible-{{ !!isSignedIn() }}">
-      <form ng-controller="PostController" ng-submit="createPost()">
+      <form ng-submit="createPost()">
         <textarea class="content" ng-model="newPostContent"></textarea>
         <input type="submit" value="Post"></input>
       </form>
@@ -29,7 +29,7 @@
   </div>
   
   <div id="main-dish">
-    <ol class="post-list" ng-controller="PostController">
+    <ol class="post-list" >
       <li ng-repeat="post in posts">
         <div class="vote">
           <div class="vote_up"></div>
