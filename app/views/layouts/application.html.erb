@@ -22,8 +22,12 @@
     </div>
     <div id="post-form" class="visible-{{ !!isSignedIn() }}">
       <form ng-submit="createPost()">
-        <textarea class="content" ng-model="newPostContent"></textarea>
-        <input type="submit" value="Post"></input>
+        <div class="text-container">
+          <textarea class="content" ng-model="newPostContent" placeholder="your amazing post goes here"></textarea>
+        </div>
+        <div class="form-controls">
+          <input type="submit" value="Post"></input>
+        </div>
       </form>
     </div>
   </div>
