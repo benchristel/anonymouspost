@@ -10,6 +10,7 @@ angular.module('AnonymousApp').controller 'AppController'
             (posts = new Post().all(Location.longitude, Location.latitude)).$promise.then ->
                 $scope.posts = posts
                 $scope.newPostContent = ''
+                console.log posts
 
     $scope.createPost = ->
         raise 'not signed in' unless Session.signedIn
