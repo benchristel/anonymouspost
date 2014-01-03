@@ -10,8 +10,8 @@ class Post < ActiveRecord::Base
   before_save :set_vote_total
   
   validates_presence_of :timestamp
-  validates_presence_of :xash
-  validates_length_of :xash, :minimum => 64, :maximum => 64
+  validates_presence_of :user_hash
+  validates_length_of :user_hash, :minimum => 64, :maximum => 64
   #validates :longitude, :numericality => { :greater_than_or_equal_to => -180, :less_than_or_equal_to => 180 }
   #validates :latitude, :numericality => { :greater_than_or_equal_to => -90, :less_than_or_equal_to => 90 }
   validates :timestamp, :numericality => true
@@ -20,7 +20,7 @@ class Post < ActiveRecord::Base
   def before_validation_cb
     if timestamp.nil?
       self.timestamp = Time.new.to_i
-      self.xash = Post.sha(@temp_user_key.to_s + self.timestamp.to_s)
+      self.user_hash = Post.sha(@temp_user_key.to_s + self.timestamp.to_s)
     end
   end
   
@@ -66,7 +66,7 @@ class Post < ActiveRecord::Base
   
   def belongs_to?(user)
     user = user.key if user.is_a? User
-    xash == Post.sha(user.to_s + timestamp.to_s)
+    user_hash == Post.sha(user.to_s + timestamp.to_s)
   end
   
   def editable_by?(user)

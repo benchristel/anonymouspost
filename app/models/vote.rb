@@ -2,7 +2,7 @@ class Vote < ActiveRecord::Base
   
   include Encryption
   
-  attr_accessible :xash, :value, :post
+  attr_accessible :uid, :value, :post
   
   belongs_to :post
   after_save    :save_post
@@ -31,11 +31,11 @@ class Vote < ActiveRecord::Base
   end
   
   def self.find_by_hash_components(user_key, post)
-    Vote.find_by_xash(Vote.generate_hash(user_key, post))
+    Vote.find_by_uid(Vote.generate_hash(user_key, post))
   end
   
   def self.create_by_hash_components_and_value(user_key, post, value)
-    Vote.create(:xash => Vote.generate_hash(user_key, post), :value => value, :post => post)
+    Vote.create(:uid => Vote.generate_hash(user_key, post), :value => value, :post => post)
   end
   
   def +(other)

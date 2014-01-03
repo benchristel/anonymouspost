@@ -13,6 +13,8 @@ angular.module('AnonymousApp').controller 'AppController'
 
     $scope.createPost = ->
         raise 'not signed in' unless Session.signedIn
+        shallow_post = {content: $scope.newPostContent, created_at: new Date(),  net_upvotes: 0}
+        $scope.posts.unshift(shallow_post)
         Location.getLocation().then ->
             attrs = {
                 content:   $scope.newPostContent
@@ -24,32 +26,38 @@ angular.module('AnonymousApp').controller 'AppController'
                 $scope.refresh()
                 
     $scope.upvote = (post) ->
-        if post.added == -1
-            post.net_upvotes = post.net_upvotes + 2
-            post.added = 1
-        else if post.added == 1
-            post.net_upvotes = post.net_upvotes - 1
-            post.added = 0
+        if Session.signedIn
+            if post.added == -1
+                post.net_upvotes = post.net_upvotes + 2
+                post.added = 1
+            else if post.added == 1
+                post.net_upvotes = post.net_upvotes - 1
+                post.added = 0
+            else
+                post.added = 1
+                post.net_upvotes = post.net_upvotes + 1
+            attrs = {
+                user_key:  Session.key
+                id:        post.id
+            }
+            new Post().upvote(attrs)
         else
-            post.added = 1
-            post.net_upvotes = post.net_upvotes + 1
-        attrs = {
-            user_key:  Session.key
-            id:        post.id
-        }
-        new Post().upvote(attrs)
+            alert 'You need to sign in to vote!'
     
     $scope.downvote = (post) ->
-        if post.added == -1
-            post.net_upvotes = post.net_upvotes + 1
-            post.added = 0
-        else if post.added == 1
-            post.net_upvotes = post.net_upvotes - 2
-            post.added = -1
+        if Session.signedIn
+            if post.added == -1
+                post.net_upvotes = post.net_upvotes + 1
+                post.added = 0
+            else if post.added == 1
+                post.net_upvotes = post.net_upvotes - 2
+                post.added = -1
+            else
+                post.added = -1
+                post.net_upvotes = post.net_upvotes - 1
+            #new Post().downvote(post)
         else
-            post.added = -1
-            post.net_upvotes = post.net_upvotes - 1
-        #new Post().downvote(post)
+            alert 'You need to sign in to vote!'
             
     $scope.signIn = ->
         Session.signIn($scope.inputUsername, $scope.inputPassword)
