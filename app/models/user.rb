@@ -15,8 +15,6 @@ class User < ActiveRecord::Base
   #end
   def self.create_by_key(key)
     User.create(:key => sha(key)).tap do |user|
-      puts user
-      puts user.key
       user.key = key
     end
   end
@@ -37,7 +35,10 @@ class User < ActiveRecord::Base
   end
   
   def self.find_by_key(key, *args, &block)
-    User.find_by_key_hash(sha(key), *args, &block)
+    puts key
+    result = User.find_by_key_hash(sha(key), *args, &block)
+    puts result.inspect
+    result
   end
   
   def self.find_all_by_key(key, *args, &block)

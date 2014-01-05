@@ -1,12 +1,17 @@
 class UsersController < ApplicationController
   include Authentication
   
-  def show
-    puts "GOT TO SIGN IN"
+  def index
     @user = User.find_by_key(params[:key].to_s)
+    puts @user
+    puts @user.inspect
     respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @user }
+      if @user
+        format.html # show.html.erb
+        format.json { render json: @user }
+      else
+        format.json { render json: :error, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -19,7 +24,7 @@ class UsersController < ApplicationController
     if !@old
       @user = User.create_by_key(params[:key].to_s)
     else
-      puts "HE /SHE EXISTED, WHOO"
+      puts "HE/SHE EXISTED, WHOO"
     end
     respond_to do |format|
       if @user

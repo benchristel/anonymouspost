@@ -1,28 +1,23 @@
-angular.module('AnonymousApp').factory('Session', ($resource) ->
-    class Session
+angular.module('AnonymousApp').factory('Session', ($resource, $q) ->
+    #class Session
+    {
         key: ''
         signedIn: false
-        
-        constructor: ->
-            @service = $resource('/users/:id.json', {id: '@id'})
             
         signIn: (username, password) ->
-            #@service.
-            @key = username + password
-            @signedIn = true
-            
+            @service = $resource('/users/:id.json', {id: '@id'})
+            new_key = username + password
+            promise = new @service().$get(key: new_key)
+            promise
+        
         signUp: (username, password) ->
+            @service = $resource('/users/:id.json', {id: '@id'})
             new_key = username + password
             promise = new @service(key: new_key).$save()
-            promise.then ->
-                @key = new_key
-                @signedIn = true
-            promise.catch ->
-                alert "User already exists! Try a different name, or sign in"
-                
-        getKey: ->
-            @key
-            
-        getSignedIn: ->
-            @signedIn
+            promise
+        
+        shallowSignIn: (username, password) ->
+            @key = username + password
+            @signedIn = true     
+    }
 )
