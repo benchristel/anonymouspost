@@ -65,9 +65,19 @@ angular.module('AnonymousApp').controller 'AppController'
             else
                 post.added = -1
                 post.net_upvotes = post.net_upvotes - 1
-                new Post().downvote(post)
+                new Post().downvote(attrs)
         else
             alert 'You need to sign in to vote!'
+          
+    $scope.delete = (post)->
+        if Session.signedIn
+            attrs = {
+                user_key:  Session.key
+                id:        post.id
+            }
+            new Post().delete(attrs)
+        else
+            alert 'You've been signed out. You probably should never see this alert. We done fucked up'
             
     $scope.signIn = ->
         Session.signIn($scope.inputUsername, $scope.inputPassword)
