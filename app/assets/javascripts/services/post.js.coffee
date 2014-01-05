@@ -1,7 +1,9 @@
 angular.module('AnonymousApp').factory('Post', ($resource) ->
     class Post
         constructor: ->
-            @service = $resource('/posts/:id.json', {id: '@id'})
+            @service = $resource('/posts/:id.json', {id: '@id'}, {
+                $upvote: {method:'PUT'}
+            })
             
         
         all: (longitude, latitude) ->
@@ -13,8 +15,11 @@ angular.module('AnonymousApp').factory('Post', ($resource) ->
                 attrs.id = post.id
             promise
             
+        delete: (attrs) ->
+            @service(attrs).$delete()
+            
         upvote: (attrs) ->
-            console.log "Should save upvote here"
+            @service.$upvote(attrs)
           
             
 )
