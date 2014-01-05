@@ -13,6 +13,13 @@ class User < ActiveRecord::Base
   #  self.longitude ||= -122
   #  self.latitude  ||= 37
   #end
+  def self.create_by_key(key)
+    User.create(:key => sha(key)).tap do |user|
+      puts user
+      puts user.key
+      user.key = key
+    end
+  end
   
   def self.find_or_create_by_key(key)
     find_or_create_by_key_hash(sha(key)).tap do |user|

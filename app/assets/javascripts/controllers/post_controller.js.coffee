@@ -2,9 +2,11 @@ angular.module('AnonymousApp').controller 'AppController'
 ,       ($scope, $timeout, Post, Session, Location) ->
     
     
-    $scope.init = () ->
+    $scope.init = ->
         @postalService = new Post()
-    
+        console.log "Here I am, can't hold onto this"
+        @sessionService = new Session()
+        
     $scope.refresh = ->
         Location.getLocation().then ->
             (posts = new Post().all(Location.longitude, Location.latitude)).$promise.then ->
@@ -13,13 +15,14 @@ angular.module('AnonymousApp').controller 'AppController'
                 console.log posts
 
     $scope.createPost = ->
-        raise 'not signed in' unless Session.signedIn
+        raise 'not signed in' unless @sessionService.getSignedIn()
+        key = @sessionService.getKey()
         shallow_post = {content: $scope.newPostContent, created_at: new Date(),  net_upvotes: 0}
         $scope.posts.unshift(shallow_post)
         Location.getLocation().then ->
             attrs = {
                 content:   $scope.newPostContent
-                user_key:  Session.key
+                user_key:  key
                 longitude: Location.longitude
                 latitude:  Location.latitude
             }
@@ -27,9 +30,11 @@ angular.module('AnonymousApp').controller 'AppController'
                 $scope.refresh()
                 
     $scope.upvote = (post) ->
-        if Session.signedIn
+        console.log @sessionService.getSignedIn()
+        if @sessionService.getSignedIn()
+            key = @sessionService.getKey()
             attrs = {
-                user_key:  Session.key
+                user_key:  key
                 id:        post.id
             }
             if post.added == -1
@@ -49,9 +54,10 @@ angular.module('AnonymousApp').controller 'AppController'
             alert 'You need to sign in to vote!'
     
     $scope.downvote = (post) ->
-        if Session.signedIn
+        if @sessionService.getSignedIn()
+            key = @sessionService.getKey()
             attrs = {
-                user_key:  Session.key
+                user_key:  key
                 id:        post.id
             }
             if post.added == -1
@@ -70,21 +76,29 @@ angular.module('AnonymousApp').controller 'AppController'
             alert 'You need to sign in to vote!'
           
     $scope.delete = (post)->
-        if Session.signedIn
-            attrs = {
-                user_key:  Session.key
-                id:        post.id
-            }
-            new Post().delete(attrs)
+        if @sessionService.getSignedIn()
+            key = @sessionService.getKey()
+            if (confirm('Are you want to delete your post?'))  
+                attrs = {
+                    user_key:  key
+                    id:        post.id
+                }
+                new Post().delete(attrs)
         else
             alert "You've been signed out. You probably should never see this alert. We done fucked up"
             
     $scope.signIn = ->
-        Session.signIn($scope.inputUsername, $scope.inputPassword)
+        @sessionService.signIn($scope.inputUsername, $scope.inputPassword)
+        $scope.inputUsername = ''
+        $scope.inputPassword = ''
+        
+    $scope.signUp = ->
+        @sessionService.signUp($scope.inputUsername, $scope.inputPassword)
         $scope.inputUsername = ''
         $scope.inputPassword = ''
         
     $scope.isSignedIn = ->
-        Session.signedIn
+        @sessionService.getSignedIn()
         
     $scope.refresh()
+    $scope.init()

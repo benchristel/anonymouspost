@@ -1,6 +1,6 @@
 Anonymouspost::Application.routes.draw do
   resources :votes 
-
+  resources :users
   resources :posts do
     member do
       put 'upvote'

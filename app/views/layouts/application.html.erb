@@ -12,8 +12,8 @@
 <div id="app-container" ng-controller="AppController">
   <div id="form-header">
     <div id="sign-in-form" class="visible-{{ !isSignedIn() }}">
-      <form ng-submit="signIn()">
-        <input type="text" class="username" placeholder="username" ng-model="inputUsername"></input><input type="password" class="password" placeholder="password" ng-model="inputPassword"></input><input type="submit" value="Sign In"></input>
+      <form ng-submit="signUp()">
+        <input type="text" class="username" placeholder="username" ng-model="inputUsername"></input><input type="password" class="password" placeholder="password" ng-model="inputPassword"></input><input type="submit" value="Sign Up"></input>
       </form>
       <p class="sign-up">
         No account?
