@@ -77,7 +77,7 @@ angular.module('AnonymousApp').controller 'AppController'
             }
             new Post().delete(attrs)
         else
-            alert 'You've been signed out. You probably should never see this alert. We done fucked up'
+            alert "You've been signed out. You probably should never see this alert. We done fucked up"
             
     $scope.signIn = ->
         Session.signIn($scope.inputUsername, $scope.inputPassword)
