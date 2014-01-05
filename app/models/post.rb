@@ -74,8 +74,6 @@ class Post < ActiveRecord::Base
   
   def belongs_to?(user)
     user = user.key if user.is_a? User
-    puts "user.key = #{user}"
-    puts "user hash = #{user_hash}"
     user_hash == Post.sha(user.to_s + timestamp.to_s)
   end
   
