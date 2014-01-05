@@ -20,8 +20,16 @@ class Post < ActiveRecord::Base
   def before_validation_cb
     if timestamp.nil?
       self.timestamp = Time.new.to_i
-      self.user_hash = Post.sha(@temp_user_key.to_s + self.timestamp.to_s)
+      set_user_hash
     end
+  end
+  
+  def set_user_hash
+    self.user_hash = compute_user_hash if user_key.present?
+  end
+  
+  def compute_user_hash(_user_key=user_key)
+    Post.sha(_user_key.to_s + timestamp.to_s)
   end
   
   DISTANCE_FALLOFF_RATE = 10000.0 # chosen arbitrarily for now
@@ -61,11 +69,13 @@ class Post < ActiveRecord::Base
   end
   
   def user_key #hack to prevent reading from write-only attribute
-    nil
+    @temp_user_key
   end
   
   def belongs_to?(user)
     user = user.key if user.is_a? User
+    puts "user.key = #{user}"
+    puts "user hash = #{user_hash}"
     user_hash == Post.sha(user.to_s + timestamp.to_s)
   end
   

@@ -22,8 +22,10 @@ describe 'As a User,' do
     let(:me) { Odin.sign_in(user_key) }
     
     let(:post) do
-      me.post(:content => content, :longitude => -122, :latitude => 33)
+      me.post(:content => content, :longitude => longitude, :latitude => latitude)
     end
+    
+    let(:longitude) { -122 }; let(:latitude) { 33 }
     
     it "creates a post" do
       expect { post }.to change { Post.count }.from(0).to(1)
@@ -42,6 +44,11 @@ describe 'As a User,' do
       post
       evil_guy = Odin.sign_in('crackmonkey79')
       expect { evil_guy.delete(post.id) }.not_to change { Post.count }
+    end
+    
+    it "says I can edit the post" do
+      post
+      expect(Post.last.editable_by?(user_key)).to be_true
     end
   end
   

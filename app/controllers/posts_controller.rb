@@ -66,7 +66,7 @@ class PostsController < ApplicationController
   # POST /posts.json
   #
   def create
-    @post = @me.post(:content => params[:post][:content], :longitude => params[:post][:longitude], :latitude => params[:post][:latitude])
+    @post = @me.post(params[:post])
     respond_to do |format|
       if @post
         format.json do

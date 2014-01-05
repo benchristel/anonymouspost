@@ -13,7 +13,7 @@ class PostsPresenter
     post.as_json.merge(
       :distance  => distance,
       :direction => direction,
-      :can_edit   => can_edit?
+      :can_edit  => can_edit?
     )
   end
   
@@ -42,7 +42,6 @@ class PostsPresenter
       # TWISP: *Away*.
     }.inject([:AWAY, 1_000_000]) do |closest, pair|
       k, v = pair
-      puts "vector = #{vector.inspect}, k = #{k.inspect}, v = #{v.inspect}, closest = #{closest.inspect}"
       dist_squared = (vector[0] - v[0])**2 + (vector[1] - v[1])**2
       if dist_squared < closest[1]
         [k, dist_squared]
