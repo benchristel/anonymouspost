@@ -57,6 +57,7 @@ class Odin
   
   private
   def vote(post_id, direction)
+    puts "SHOULD BE VOTING RIGHT NOW!"
     ActiveRecord::Base.transaction do
       Post.find(post_id).tap do |post|
         delta = Vote.vote!(user.key, post, direction)

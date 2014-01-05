@@ -28,35 +28,44 @@ angular.module('AnonymousApp').controller 'AppController'
                 
     $scope.upvote = (post) ->
         if Session.signedIn
-            if post.added == -1
-                post.net_upvotes = post.net_upvotes + 2
-                post.added = 1
-            else if post.added == 1
-                post.net_upvotes = post.net_upvotes - 1
-                post.added = 0
-            else
-                post.added = 1
-                post.net_upvotes = post.net_upvotes + 1
             attrs = {
                 user_key:  Session.key
                 id:        post.id
             }
-            new Post().upvote(attrs)
+            if post.added == -1
+                post.net_upvotes = post.net_upvotes + 2
+                post.added = 1
+                new Post().upvote(attrs)
+            else if post.added == 1
+                post.net_upvotes = post.net_upvotes - 1
+                post.added = 0
+                new Post().unvote(attrs)
+            else
+                post.added = 1
+                post.net_upvotes = post.net_upvotes + 1
+                new Post().upvote(attrs)
+            
         else
             alert 'You need to sign in to vote!'
     
     $scope.downvote = (post) ->
         if Session.signedIn
+            attrs = {
+                user_key:  Session.key
+                id:        post.id
+            }
             if post.added == -1
                 post.net_upvotes = post.net_upvotes + 1
                 post.added = 0
+                new Post().unvote(post)
             else if post.added == 1
                 post.net_upvotes = post.net_upvotes - 2
                 post.added = -1
+                new Post().downvote(post)
             else
                 post.added = -1
                 post.net_upvotes = post.net_upvotes - 1
-            #new Post().downvote(post)
+                new Post().downvote(post)
         else
             alert 'You need to sign in to vote!'
             

@@ -2,7 +2,11 @@ angular.module('AnonymousApp').factory('Post', ($resource) ->
     class Post
         constructor: ->
             @service = $resource('/posts/:id.json', {id: '@id'}, {
-                $upvote: {method:'PUT'}
+                $upvote: {method:'PUT', url: '/posts/:id/upvote.json'},
+                $downvote: {method:'PUT', url: '/posts/:id/downvote.json'},
+                $unvote: {method:'PUT', url: '/posts/:id/unvote.json'}
+
+
             })
             
         
@@ -20,6 +24,12 @@ angular.module('AnonymousApp').factory('Post', ($resource) ->
             
         upvote: (attrs) ->
             @service.$upvote(attrs)
+            
+        downvote: (attrs) ->
+            @service.$downvote(attrs)
+
+        unvote: (attrs) ->
+            @service.$unvote(attrs)
           
             
 )

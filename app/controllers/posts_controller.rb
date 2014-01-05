@@ -85,6 +85,7 @@ class PostsController < ApplicationController
   end
   
   def upvote
+    puts "BITCH< I BE TRYIN TO VOTE"
     @vote = @me.upvote(params[:id])
     @post = Post.find_by_id(params[:id])
     respond_to do |format|
@@ -131,7 +132,7 @@ class PostsController < ApplicationController
   # PUT /posts/1
   # PUT /posts/1.json
   def update
-    
+    puts "UPDATE BITCH"
     @post = Post.find(params[:id])
 
     respond_to do |format|
