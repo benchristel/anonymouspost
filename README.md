@@ -3,16 +3,21 @@ anonymouspost
 
 ## TODO
 
+- Posts API should inform clients of whether they've voted on a post, and in which direction
+- After signin, reload the posts to get data on editability and votes
+- client should update after getting response from POSTs and PUTs if clientside prediction is wrong
+- account creation and sign in as two separate functions
 - allow users to delete their posts
 - view for a single post, showing detailed location info and the full text
 - mobile css
-- prettier css
-- account creation and sign in as two separate functions
 - rate limit requests (if it's easy in Rails)
 - ban the null user
 - voting arrows should be highlighted to show your existing vote
 - display distance from user instead of GPS coords
 - display human-readable time format
+- rate-limit signups from a given IP
+- limit posts index view to ~50 posts on initial load, and let the user load more if desired
+- poll for new posts, Twitter-style
 
 ## Cool Ideas
 
@@ -32,6 +37,13 @@ anonymouspost
 ## Contributing
 
 1. Fork this repo and make your changes.
-2. Run the tests with `bundle exec rspec spec` to make sure nothing's broken.
+2. Use the following rhyming incantation to make sure nothing's broken:
+
+   ```
+   bundle exec rspec spec
+   ```
+   
+   If you don't do this before pull-requesting your change, we'll laugh, cry, cry tears of blood, fire will rain into the sea, and the Goat of Manifold Brood will devour the earth entire.
+
 3. Submit a pull request.
 4. Wait 1000 years.
