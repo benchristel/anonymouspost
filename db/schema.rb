@@ -11,11 +11,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131214222005) do
+ActiveRecord::Schema.define(:version => 20140102052509) do
 
   create_table "posts", :force => true do |t|
     t.string   "content",         :limit => 720
-    t.string   "xash",            :limit => 64,                   :null => false
+    t.string   "user_hash",       :limit => 64,                   :null => false
     t.integer  "timestamp",                                       :null => false
     t.float    "longitude",                                       :null => false
     t.float    "latitude",                                        :null => false
@@ -25,13 +25,22 @@ ActiveRecord::Schema.define(:version => 20131214222005) do
     t.datetime "updated_at",                                      :null => false
   end
 
+  create_table "posts_tags", :force => true do |t|
+    t.integer "post_id"
+    t.integer "tag_id"
+  end
+
+  create_table "tags", :force => true do |t|
+    t.string "text"
+  end
+
   create_table "users", :force => true do |t|
     t.string  "key_hash",              :limit => 64, :null => false
     t.integer "posting_allowed_after"
   end
 
   create_table "votes", :force => true do |t|
-    t.string   "xash",       :limit => 64, :null => false
+    t.string   "uid",        :limit => 64, :null => false
     t.datetime "created_at",               :null => false
     t.datetime "updated_at",               :null => false
     t.integer  "post_id"

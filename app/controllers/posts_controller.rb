@@ -66,7 +66,7 @@ class PostsController < ApplicationController
   # POST /posts.json
   #
   def create
-    @post = @me.post(:content => params[:post][:content], :longitude => params[:post][:longitude], :latitude => params[:post][:latitude])  
+    @post = @me.post(:content => params[:post][:content], :longitude => params[:post][:longitude], :latitude => params[:post][:latitude])
     respond_to do |format|
       if @post
         format.json do
@@ -85,6 +85,7 @@ class PostsController < ApplicationController
   end
   
   def upvote
+    puts "BITCH< I BE TRYIN TO VOTE"
     @vote = @me.upvote(params[:id])
     @post = Post.find_by_id(params[:id])
     respond_to do |format|
@@ -131,7 +132,7 @@ class PostsController < ApplicationController
   # PUT /posts/1
   # PUT /posts/1.json
   def update
-    
+    puts "UPDATE BITCH"
     @post = Post.find(params[:id])
 
     respond_to do |format|

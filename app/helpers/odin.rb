@@ -20,7 +20,14 @@ class Odin
     options = options.reverse_merge(
       :user_key  => user.key
     )  
-    Post.create!(options)
+    post = Post.create!(options)
+    tag  = Tag.find_or_create({:text => "hash"})
+    args = {
+      :post_id => post.id,
+      :tag_id => tag.id
+    }
+    PostsTag.create!(args)
+    post
   end
   
   public
@@ -50,6 +57,7 @@ class Odin
   
   private
   def vote(post_id, direction)
+    puts "SHOULD BE VOTING RIGHT NOW!"
     ActiveRecord::Base.transaction do
       Post.find(post_id).tap do |post|
         delta = Vote.vote!(user.key, post, direction)
