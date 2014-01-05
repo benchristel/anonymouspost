@@ -3,7 +3,6 @@ anonymouspost
 
 ## TODO
 
-- allow users to vote on posts
 - allow users to delete their posts
 - view for a single post, showing detailed location info and the full text
 - mobile css
