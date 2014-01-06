@@ -92,11 +92,12 @@ angular.module('AnonymousApp').controller 'AppController'
         promise = Session.signIn($scope.inputUsername, $scope.inputPassword)
         promise.then ->
             Session.shallowSignIn($scope.inputUsername, $scope.inputPassword)
+            $scope.inputUsername = ''
+            $scope.inputPassword = ''
             $scope.refresh()
         promise.catch ->
-            alert "This account doesn't exist" 
-        $scope.inputUsername = ''
-        $scope.inputPassword = ''
+            alert "This account doesn't exist"
+
 
         
     $scope.signUp = ->
@@ -104,10 +105,11 @@ angular.module('AnonymousApp').controller 'AppController'
         promise.then ->
             Session.shallowSignIn($scope.inputUsername, $scope.inputPassword)
             $scope.refresh()
+            $scope.inputUsername = ''
+            $scope.inputPassword = ''
         promise.catch ->
             alert "This account already exists"
-        $scope.inputUsername = ''
-        $scope.inputPassword = ''
+        
         
         
     $scope.isSignedIn = ->

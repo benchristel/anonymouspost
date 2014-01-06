@@ -1,6 +1,6 @@
 Anonymouspost::Application.routes.draw do
   resources :votes 
-  resources :users
+
   resources :posts do
     member do
       put 'upvote'
@@ -9,7 +9,7 @@ Anonymouspost::Application.routes.draw do
     end
   end
   get '/posts(/near/:longitude/:latitude)', :to => 'posts#index', :defaults => { format: 'html' }
-
+  resources :users
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
