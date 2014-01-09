@@ -7,7 +7,7 @@ class Odin
   end
   
   def self.sign_up(user_key)
-    user = User.create_by_key(user_key.to_s)
+    user = User.create_by_key(user_key.to_s) unless User.find_by_key(user_key.to_s)
     self.new(:user => user)
   end
   

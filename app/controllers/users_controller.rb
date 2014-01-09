@@ -1,16 +1,14 @@
 class UsersController < ApplicationController
   include Authentication
   
-  def index
-    @user = User.find_by_key(params[:key].to_s)
-    puts @user
-    puts @user.inspect
+  def sign_in
+    @user = Odin.sign_in(params[:key].to_s)
     respond_to do |format|
       if @user
         format.html # show.html.erb
         format.json { render json: @user }
       else
-        format.json { render json: :error, status: :unprocessable_entity }
+        format.json { render json: :error, status: 404 }
       end
     end
   end
@@ -19,10 +17,10 @@ class UsersController < ApplicationController
   # POST /posts.json
   #
   def create
-    @old = User.find_by_key(params[:key].to_s)
+    @old = Odin.sign_in(params[:key].to_s)
     puts @old.inspect
     if !@old
-      @user = User.create_by_key(params[:key].to_s)
+      @user = Odin.sign_up(params[:key].to_s)
     else
       puts "HE/SHE EXISTED, WHOO"
     end

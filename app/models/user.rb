@@ -1,12 +1,13 @@
 class User < ActiveRecord::Base
   include Encryption
-
-  attr_accessible :key
+  
+  attr_accessible :key, :key_hash
+  
   attr_accessor :key#, :longitude, :latitude
 
   validates_presence_of :key_hash
   validates_length_of :key_hash, :minimum => 64, :maximum => 64
-  
+
   #after_initialize :set_location
   #
   #def set_location
@@ -14,7 +15,7 @@ class User < ActiveRecord::Base
   #  self.latitude  ||= 37
   #end
   def self.create_by_key(key)
-    User.create(:key => sha(key)).tap do |user|
+    User.create(:key_hash  => sha(key)).tap do |user|
       user.key = key
     end
   end
@@ -35,9 +36,7 @@ class User < ActiveRecord::Base
   end
   
   def self.find_by_key(key, *args, &block)
-    puts key
     result = User.find_by_key_hash(sha(key), *args, &block)
-    puts result.inspect
     result
   end
   
