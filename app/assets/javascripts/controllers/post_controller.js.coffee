@@ -2,15 +2,19 @@ angular.module('AnonymousApp').controller 'AppController'
 ,       ($scope, $timeout, Post, Session, Location) ->
     
     
-    $scope.init = () ->
+    $scope.init = ->
         @postalService = new Post()
-    
+        console.log "Here I am, can't hold onto this"
+        #Session = new Session()
+        
+        
     $scope.refresh = ->
         Location.getLocation().then ->
             (posts = new Post().all(Location.longitude, Location.latitude)).$promise.then ->
                 $scope.posts = posts
                 $scope.newPostContent = ''
                 console.log posts
+
 
     $scope.createPost = ->
         raise 'not signed in' unless Session.signedIn
@@ -25,6 +29,7 @@ angular.module('AnonymousApp').controller 'AppController'
             }
             new Post().create(attrs).then ->
                 $scope.refresh()
+               
                 
     $scope.upvote = (post) ->
         if Session.signedIn
@@ -48,6 +53,7 @@ angular.module('AnonymousApp').controller 'AppController'
         else
             alert 'You need to sign in to vote!'
     
+    
     $scope.downvote = (post) ->
         if Session.signedIn
             attrs = {
@@ -69,22 +75,46 @@ angular.module('AnonymousApp').controller 'AppController'
         else
             alert 'You need to sign in to vote!'
           
+          
     $scope.delete = (post)->
         if Session.signedIn
-            attrs = {
-                user_key:  Session.key
-                id:        post.id
-            }
-            new Post().delete(attrs)
+            if (confirm('Are you want to delete your post?'))  
+                attrs = {
+                    user_key:  Session.key
+                    id:        post.id
+                }
+                new Post().delete(attrs)
         else
             alert "You've been signed out. You probably should never see this alert. We done fucked up"
             
+            
     $scope.signIn = ->
-        Session.signIn($scope.inputUsername, $scope.inputPassword)
-        $scope.inputUsername = ''
-        $scope.inputPassword = ''
+        promise = Session.signIn($scope.inputUsername, $scope.inputPassword)
+        promise.then ->
+            Session.shallowSignIn($scope.inputUsername, $scope.inputPassword)
+            $scope.inputUsername = ''
+            $scope.inputPassword = ''
+            $scope.refresh()
+        promise.catch ->
+            alert "This account doesn't exist"
+
+
+        
+    $scope.signUp = ->
+        promise= Session.signUp($scope.inputUsername, $scope.inputPassword)
+        promise.then ->
+            Session.shallowSignIn($scope.inputUsername, $scope.inputPassword)
+            $scope.refresh()
+            $scope.inputUsername = ''
+            $scope.inputPassword = ''
+        promise.catch ->
+            alert "This account already exists"
+        
+        
         
     $scope.isSignedIn = ->
         Session.signedIn
+
         
     $scope.refresh()
+    $scope.init()

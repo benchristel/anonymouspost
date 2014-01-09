@@ -2,14 +2,33 @@ require 'spec_helper'
 
 describe 'As a User,' do
   let(:user_key) { 'marzipanBear$246' }
-  context 'when I sign in with a new User Key, it' do
-    it "creates a new User record" do
-      expect { Odin.sign_in(user_key) }.to change { User.count }.from(0).to(1)
+  
+  context 'when I sign up with a new user key, it' do
+    it "creates a user" do
+      expect { Odin.sign_up(user_key) }.to change { User.count }.by(1)
+    end
+  end
+  
+  context 'when I sign up with an existing user key, it' do
+    before { Odin.sign_up(user_key) }
+    
+    it "does not create a user" do
+      expect { Odin.sign_up(user_key) }.not_to change { User.count }
+    end
+  end
+  
+  context 'when I try to sign in with a nonexistent User Key, it' do
+    it "does not create a user" do
+      expect { Odin.sign_in(user_key) }.not_to change { User.count }
+    end
+    
+    it "does not sign me in" do
+      expect( Odin.sign_in(user_key).user ).to be_nil
     end
   end
   
   context 'when I sign in with an existing User Key, it' do
-    before { Odin.sign_in(user_key) }
+    before { Odin.sign_up(user_key) }
     
     it "finds the existing User record" do
       expect{ Odin.sign_in(user_key) }.not_to change { User.count }
@@ -19,7 +38,7 @@ describe 'As a User,' do
   
   context 'when I post, it' do
     let(:content) { 'i fell asleep' }
-    let(:me) { Odin.sign_in(user_key) }
+    let(:me) { Odin.sign_up(user_key) }
     
     let(:post) do
       me.post(:content => content, :longitude => longitude, :latitude => latitude)
@@ -42,7 +61,7 @@ describe 'As a User,' do
     
     it "doesn't let any other user delete the post" do
       post
-      evil_guy = Odin.sign_in('crackmonkey79')
+      evil_guy = Odin.sign_up('crackmonkey79')
       expect { evil_guy.delete(post.id) }.not_to change { Post.count }
     end
     
@@ -54,12 +73,12 @@ describe 'As a User,' do
   
   context "when I vote on a post, it" do
     let(:content) { 'i fell asleep' }
-    let(:me)    { Odin.sign_in('user1') }
-    let(:user2) { Odin.sign_in('user2') }
-    let(:user3) { Odin.sign_in('user3') }
+    let(:me)    { Odin.sign_up('user1') }
+    let(:user2) { Odin.sign_up('user2') }
+    let(:user3) { Odin.sign_up('user3') }
     
     let(:post) do
-      Odin.sign_in('otheruser').post(:content => content, :longitude => -122, :latitude => 33)
+      Odin.sign_up('otheruser').post(:content => content, :longitude => -122, :latitude => 33)
     end
     
     it "changes the vote count" do

@@ -11,8 +11,8 @@ angular.module('AnonymousApp').factory('Post', ($resource, Session) ->
         all: (longitude, latitude) ->
             @service.query(longitude: longitude, latitude: latitude)
             
-
         create: (attrs) ->
+            console.log Session.key
             promise = new @service(post: attrs).$save (post) ->
                 attrs.id = post.id
             promise
