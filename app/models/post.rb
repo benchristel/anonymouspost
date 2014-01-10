@@ -6,7 +6,7 @@ class Post < ActiveRecord::Base
   attr_accessible :content, :latitude, :longitude, :user_key
   
   has_many :votes, :dependent => :delete_all
-  
+
   before_save :set_vote_total
   
   validates_presence_of :timestamp
@@ -81,9 +81,9 @@ class Post < ActiveRecord::Base
     belongs_to? user
   end
   
-  def vote_total
-    cached[:vote_total] ||= votes.sum(:value)
-  end
+  #def vote_total
+  #  cached[:vote_total] ||= (votes.is_a?(Array) ? votes.sum(&:value) : votes.sum(:value))
+  #end
   
   def vote_multiplier
     cached[:vote_multiplier] ||=
@@ -135,10 +135,15 @@ class Post < ActiveRecord::Base
   private
   def set_vote_total
     @already_set_vote_total ||= begin
-      self.vote_total = votes.sum(:value)
+      self.vote_total = compute_vote_total
       self.vote_multiplier = vote_total < 0 ?
           Math::E**(vote_total*VOTE_MULTIPLIER_CONSTANT) :
           (vote_total*VOTE_MULTIPLIER_CONSTANT)+1
     end
+  end
+  
+  private
+  def compute_vote_total
+    votes.sum(:value)
   end
 end
