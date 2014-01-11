@@ -6627,12 +6627,14 @@ input.search-query {
 }
 
 .card {
-  padding-top: 20px;
-  margin: 10px 0 20px 0;
+  padding-top: 5px;
+  padding-left: 5px;
+  margin: 10px 10px 10px 10px;
   background-color: #ffffff;
   border: 1px solid #d8d8d8;
   border-top-width: 0;
   border-bottom-width: 2px;
+  min-height: 90px;
   -webkit-border-radius: 3px;
      -moz-border-radius: 3px;
           border-radius: 3px;
@@ -6687,7 +6689,7 @@ input.search-query {
 
 .card .card-body {
   padding: 0 20px;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .card .card-media {
@@ -6866,6 +6868,64 @@ input.search-query {
   padding: 0 20px;
   margin-bottom: 17px;
 }
+
+.card .distance {
+     display: inline;
+     color: #888;
+ }
+.card  .time {
+     display: inline;
+     color: #888;
+ }
+.card .location {
+     display: inline;
+     color: #888;
+ }
+.card .longitude {
+     display: inline;
+ }
+.card .latitude {
+     display: inline;
+ }
+.card .content {
+     width: 100%;
+     white-space: pre-line;
+     white-space: -webkit-pre-line;
+ }
+.card .vote {
+     float: left;
+     height: inherit;
+     width: 60px;
+     padding:10px 3px 3px 3px
+
+ }
+.card .vote .vote_up {
+     background-image: url('/arrowup.png');
+     background-repeat: no-repeat;
+     background-position: center;
+     position: relative;
+     height: 16px;
+     width: inherit;
+     z-index: 0;
+     cursor: pointer;
+ }
+.card .vote .vote_down {
+     background-image: url('/arrowdown.png');
+     background-repeat: no-repeat;
+     background-position: center;
+     position: relative;
+     height: 16px;
+     width: inherit;
+     z-index: 0;
+     cursor: pointer;
+ }
+.card .vote .vote_total {
+     width: inherit;
+     height: 28px;
+     text-align: center;
+     line-height: 28px;
+     font-size: 24px;
+ }
 
 .hero-unit {
   padding: 60px 0;
