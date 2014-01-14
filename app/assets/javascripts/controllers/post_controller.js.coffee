@@ -68,7 +68,10 @@ angular.module('AnonymousApp').controller 'AppController'
                 new Post().downvote(attrs)
         else
             alert 'You need to sign in to vote!'
-          
+            
+    $scope.isOwner = (post) ->
+        post.can_edit
+        
     $scope.delete = (post)->
         if Session.signedIn
             attrs = {

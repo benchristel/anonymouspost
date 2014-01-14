@@ -57,6 +57,7 @@
         <div class="time">
           {{ post.created_at }}
         </div>
+        <div type = "button" class = "delete visible-{{ isOwner(post) }}" ng-click=" delete(post)"> x </div>
       </li>
     </ol>
     
