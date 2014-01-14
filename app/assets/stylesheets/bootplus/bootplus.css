@@ -6627,6 +6627,7 @@ input.search-query {
 }
 
 .card {
+  position: relative;
   padding-top: 5px;
   padding-left: 5px;
   margin: 10px 10px 10px 10px;
@@ -6634,7 +6635,8 @@ input.search-query {
   border: 1px solid #d8d8d8;
   border-top-width: 0;
   border-bottom-width: 2px;
-  min-height: 90px;
+  /*min-height: 90px;*/
+  overflow:hidden;
   -webkit-border-radius: 3px;
      -moz-border-radius: 3px;
           border-radius: 3px;
@@ -6688,7 +6690,8 @@ input.search-query {
 }
 
 .card .card-body {
-  padding: 0 20px;
+  padding: 0 20px 0 70px;
+  
   margin-top: 10px;
 }
 
@@ -6872,12 +6875,35 @@ input.search-query {
 .card .distance {
      display: inline;
      color: #888;
+     /*float: right;*/
+     position:relative;
+     right:0;
+     bottom:0;
  }
 .card  .time {
      display: inline;
      color: #888;
+     /*float: right;*/
+     position:relative;
+     right:0;
+     bottom:0;
+
+ }
+ 
+ .card .delete{
+    position: absolute;
+    top: 5px;
+    right: 12px;
+    color: #999;
+    cursor: pointer;
+
+  
  }
 .card .location {
+     /*float: right;*/
+     position:relative;
+     right:0;
+     bottom:0;
      display: inline;
      color: #888;
  }
@@ -6894,9 +6920,9 @@ input.search-query {
  }
 .card .vote {
      float: left;
-     height: inherit;
+     height: 100%;
      width: 60px;
-     padding:10px 3px 3px 3px
+     padding:15px 3px 15px 3px
 
  }
 .card .vote .vote_up {

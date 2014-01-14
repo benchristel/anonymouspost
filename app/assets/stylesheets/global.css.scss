@@ -51,7 +51,9 @@ html, body {
 }
 
 #form-header {
-    padding-top: 10px;    
+    padding-top: 10px;
+    padding-left: 120px;
+    padding-right: 120px;
     /*width: $app_width;*/
     max-width: 100%;
     height: 120px;
@@ -69,12 +71,15 @@ html, body {
     .text-container {
         margin-left: 10px;
         margin-right: 10px;
+         -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+                border-radius: 3px;
         padding: 8px;
-        padding-bottom: 0;
+        padding-bottom: 3px;
         padding-right: 12px;
         background-color: #fff;
-        border: 1px solid #555;
-        border-bottom: none;
+        /*border: 1px solid #555;*/
+        border: none;
         /*border-radius: 8px 8px 0 0;*/
     }
 
@@ -98,21 +103,29 @@ html, body {
         .form-controls {
             margin-left: 10px;
             margin-right: 10px;
-            border-radius: 0 0 8px 8px;
-            border: 1px solid #555;
-            background-color: #888;
+            -webkit-border-radius: 3px;
+               -moz-border-radius: 3px;
+                    border-radius: 3px;
+            /*border: 1px solid #555;*/
+            /*background-color: #888;*/
             
             input[type=submit] {
-                display: block;
+                /*display: block;*/
+                float: right;
                 margin-right: 0;
-                margin-left: auto;
+                margin-left: 0;
+                margin-top: 3px;
                 padding: 8px;
-                padding-left: 16px;
+                padding-left:16px;
                 padding-right: 16px;
                 border-left: 1px solid #555;
-                border-radius: 0 0 8px 0;
+                /*width: 40px;*/
+                /*border-radius: 0 0 8px 0;*/
+                -webkit-border-radius: 3px;
+                   -moz-border-radius: 3px;
+                        border-radius: 3px;
                 font-size: 18px;
-                background-color: $orange;
+                background-color: #fff;
             }
         }   
     }
@@ -250,19 +263,28 @@ ol.post-list {
         .distance {
             display: inline;
             color: #888;
+            float: right;
+
         }
         .time {
             display: inline;
             color: #888;
+            float: right;
+
         }
         .location {
             display: inline;
             color: #888;
+            float: right;
+
         }
         .longitude {
             display: inline;
+            float: right;
+
         }
         .latitude {
+            float: right;
             display: inline;
         }
         .content {
