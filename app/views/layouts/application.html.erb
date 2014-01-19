@@ -11,7 +11,7 @@
 
 <div id="app-container" ng-controller="AppController">
   <div id="form-header">
-    <div id="sign-in-form" class="visible-{{ !isSignedIn() }}">
+    <div id="sign-in-form" ng-hide="!!isSignedIn()">
       <form ng-submit="signIn()">
         <input type="text" class="username" placeholder="username" ng-model="inputUsername"></input><input type="password" class="password" placeholder="password" ng-model="inputPassword"></input><input type="submit" value="Sign In"></input>
       </form>
@@ -20,7 +20,7 @@
         <%= link_to "Sign up!", 'javascript:void(0)' %>
       </p>
     </div>
-    <div id="post-form" class="visible-{{ !!isSignedIn() }}">
+    <div id="post-form" ng-hide="!isSignedIn()"">
       <form ng-submit="createPost()">
         <div class="text-container">
           <textarea class="content" ng-model="newPostContent" placeholder="your amazing post goes here"></textarea>
@@ -57,7 +57,7 @@
         <div class="time">
           {{ post.created_at }}
         </div>
-        <div type = "button" class = "delete visible-{{ isOwner(post) }}" ng-click=" delete(post)"> x </div>
+        <div type = "button" class = "delete visible-{{ isOwner(post) }}" ng-click=" delete($index)"> x </div>
       </li>
     </ol>
     

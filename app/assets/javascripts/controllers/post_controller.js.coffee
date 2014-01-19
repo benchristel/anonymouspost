@@ -77,15 +77,16 @@ angular.module('AnonymousApp').controller 'AppController'
             
     $scope.isOwner = (post) ->
         post.can_edit
-
-    $scope.delete = (post)->
+    
+    $scope.delete = (index)->
+        post = $scope.posts[index]
         if Session.signedIn
-            if (confirm('Are you want to delete your post?'))  
-                attrs = {
-                    user_key:  Session.key
-                    id:        post.id
-                }
-                new Post().delete(attrs)
+            attrs = {
+                user_key:  Session.key
+                id:        post.id
+            }
+            (new Post().delete(attrs)).then ->
+                $scope.posts.splice(index, 1)
         else
             alert "You've been signed out. You probably should never see this alert. We done fucked up"
             
