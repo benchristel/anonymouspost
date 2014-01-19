@@ -18,7 +18,8 @@ angular.module('AnonymousApp').factory('Post', ($resource, Session) ->
             promise
             
         delete: (attrs) ->
-            @service(attrs).$delete()
+            promise = new @service(attrs).$delete()
+            
             
         upvote: (attrs) ->
             @service.$upvote(attrs)
