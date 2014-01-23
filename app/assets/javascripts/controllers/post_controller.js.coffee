@@ -94,6 +94,8 @@ angular.module('AnonymousApp').controller 'AppController'
     $scope.signIn = ->
         promise = Session.signIn($scope.inputUsername, $scope.inputPassword)
         promise.then ->
+            console.log "Signing in shallow...."
+
             Session.shallowSignIn($scope.inputUsername, $scope.inputPassword)
             $scope.inputUsername = ''
             $scope.inputPassword = ''
@@ -106,6 +108,7 @@ angular.module('AnonymousApp').controller 'AppController'
     $scope.signUp = ->
         promise= Session.signUp($scope.inputUsername, $scope.inputPassword)
         promise.then ->
+            console.log "Signing UP shallow...."
             Session.shallowSignIn($scope.inputUsername, $scope.inputPassword)
             $scope.refresh()
             $scope.inputUsername = ''

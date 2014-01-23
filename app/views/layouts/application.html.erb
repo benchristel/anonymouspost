@@ -11,13 +11,22 @@
 
 <div id="app-container" ng-controller="AppController">
   <div id="form-header">
-    <div id="sign-in-form" ng-hide="!!isSignedIn()">
+    <div id="sign-in-form" ng-hide="!!isSignedIn() || !!signup" ng-init"signup=false">
       <form ng-submit="signIn()">
         <input type="text" class="username" placeholder="username" ng-model="inputUsername"></input><input type="password" class="password" placeholder="password" ng-model="inputPassword"></input><input type="submit" value="Sign In"></input>
       </form>
-      <p class="sign-up">
+      <p class="sign-up" ng-click= "signup=true">
         No account?
-        <%= link_to "Sign up!", 'javascript:void(0)' %>
+        <%= link_to "Sign Up!", 'javascript:void(0)' %>
+      </p>
+    </div>
+    <div id="sign-in-form" ng-hide="!!isSignedIn() || !signup">
+      <form ng-submit="signUp()">
+        <input type="text" class="username" placeholder="username" ng-model="inputUsername"></input><input type="password" class="password" placeholder="password" ng-model="inputPassword"></input><input type="submit" value="Sign Up"></input>
+      </form>
+      <p class="sign-up" ng-click= "signup=false">
+        Already have an account?
+        <%= link_to "Sign In!", 'javascript:void(0)' %>
       </p>
     </div>
     <div id="post-form" ng-hide="!isSignedIn()"">

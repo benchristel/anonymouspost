@@ -3,8 +3,9 @@ class UsersController < ApplicationController
   
   def sign_in
     @user = Odin.sign_in(params[:key].to_s)
+    puts @user
     respond_to do |format|
-      if @user
+      if @user.user
         format.html # show.html.erb
         format.json { render json: @user }
       else
@@ -19,14 +20,14 @@ class UsersController < ApplicationController
   def create
     @old = Odin.sign_in(params[:key].to_s)
     puts @old.inspect
-    if !@old
+    if !@old.user
       @user = Odin.sign_up(params[:key].to_s)
     else
       puts "HE/SHE EXISTED, WHOO"
     end
     respond_to do |format|
-      if @user
-        format.json { render json: @user, status: :created, location: @user }
+      if @user && @user.user 
+        format.json { render json: @user, status: :created }
       else
         format.json { render json: :error, status: :unprocessable_entity }
       end
