@@ -36,8 +36,11 @@ class User < ActiveRecord::Base
   end
   
   def self.find_by_key(key, *args, &block)
-    result = User.find_by_key_hash(sha(key), *args, &block)
-    result
+    User.find_by_key_hash(sha(key), *args, &block).tap do |user|
+      if user
+        user.key = key
+      end
+    end
   end
   
   def self.find_all_by_key(key, *args, &block)
