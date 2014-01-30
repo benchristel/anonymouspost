@@ -37,16 +37,16 @@ angular.module('AnonymousApp').controller 'AppController'
                 user_key:  Session.key
                 id:        post.id
             }
-            if post.added == -1
+            if post.existing_vote == -1
                 post.net_upvotes = post.net_upvotes + 2
-                post.added = 1
+                post.existing_vote = 1
                 new Post().upvote(attrs)
-            else if post.added == 1
+            else if post.existing_vote == 1
                 post.net_upvotes = post.net_upvotes - 1
-                post.added = 0
+                post.existing_vote = 0
                 new Post().unvote(attrs)
             else
-                post.added = 1
+                post.existing_vote = 1
                 post.net_upvotes = post.net_upvotes + 1
                 new Post().upvote(attrs)
             
@@ -60,16 +60,16 @@ angular.module('AnonymousApp').controller 'AppController'
                 user_key:  Session.key
                 id:        post.id
             }
-            if post.added == -1
+            if post.existing_vote == -1
                 post.net_upvotes = post.net_upvotes + 1
-                post.added = 0
+                post.existing_vote = 0
                 new Post().unvote(post)
-            else if post.added == 1
+            else if post.existing_vote == 1
                 post.net_upvotes = post.net_upvotes - 2
-                post.added = -1
+                post.existing_vote = -1
                 new Post().downvote(post)
             else
-                post.added = -1
+                post.existing_vote = -1
                 post.net_upvotes = post.net_upvotes - 1
                 new Post().downvote(attrs)
         else
