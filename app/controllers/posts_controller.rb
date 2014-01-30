@@ -148,7 +148,6 @@ class PostsController < ApplicationController
   # DELETE /posts/1.json
   def destroy
     @me.delete_post(params[:id])
-
     respond_to do |format|
       format.json { head :no_content }
     end

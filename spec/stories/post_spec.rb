@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'when I view a list of posts, it' do
   let(:user_key) { 'marzipanBear$246' }
-  let(:me) { Odin.sign_in(user_key) }
+  let(:me) { Odin.sign_up(user_key) }
   let(:longitude) { -122 }
   let(:latitude) { 33 }
   let(:content) { 'hi' }
