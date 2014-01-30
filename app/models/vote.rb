@@ -23,7 +23,7 @@ class Vote < ActiveRecord::Base
       vote_to_undo.destroy
       post.reload
     end
-    puts find_by_hash_components(user_key, post)
+
     if direction != 0
       new_vote = create_by_hash_components_and_value(user_key, post, direction)
       vote_delta += direction
@@ -37,7 +37,6 @@ class Vote < ActiveRecord::Base
   
   def self.create_by_hash_components_and_value(user_key, post, value)
     Vote.create(:uid => Vote.generate_hash(user_key, post), :value => value, :post => post)
-    puts find_by_hash_components(user_key, post)
   end
   
   def +(other)
