@@ -21,6 +21,7 @@ class Vote < ActiveRecord::Base
     if vote_to_undo
       vote_delta -= vote_to_undo.value
       vote_to_undo.destroy
+      post.reload
     end
     puts find_by_hash_components(user_key, post)
     if direction != 0
