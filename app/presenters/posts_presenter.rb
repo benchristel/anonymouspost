@@ -11,9 +11,10 @@ class PostsPresenter
   public
   def as_json(options={})
     post.as_json.merge(
-      :distance  => distance,
-      :direction => direction,
-      :can_edit  => can_edit?
+      :distance      => distance,
+      :direction     => direction,
+      :can_edit      => can_edit?,
+      :existing_vote => existing_vote
     )
   end
   
@@ -53,5 +54,18 @@ class PostsPresenter
   
   def can_edit?
     post.editable_by?(user_key)
+  end
+  
+  def existing_vote
+    Vote.find_by_hash_components(user_key, post).try(:value) || 0
+  end
+  
+  # delegate missing methods to post
+  def method_missing(meth, *args, &block)
+    post.public_send(meth, *args, &block)
+  end
+  
+  def respond_to?(meth)
+    super || post.respond_to?(meth)
   end
 end
