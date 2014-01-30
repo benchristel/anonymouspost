@@ -2,7 +2,12 @@ class Odin
   attr_accessor :user
   
   def self.sign_in(user_key)
-    user = User.find_or_create_by_key(user_key.to_s)
+    user = User.find_by_key(user_key.to_s)
+    self.new(:user => user)
+  end
+  
+  def self.sign_up(user_key)
+    user = User.create_by_key(user_key.to_s) unless User.find_by_key(user_key.to_s)
     self.new(:user => user)
   end
   
