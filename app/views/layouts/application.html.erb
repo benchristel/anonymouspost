@@ -9,82 +9,90 @@
 </head>
 <body>
 
-<div id="app-container" ng-controller="AppController">
-  <div id="form-header">
-    <div id="sign-in-form" ng-hide="!!isSignedIn() || !!signup" ng-init"signup=false">
-      <form ng-submit="signIn()">
-        <input type="text" class="username" placeholder="username" ng-model="inputUsername"></input><input type="password" class="password" placeholder="password" ng-model="inputPassword"></input><input type="submit" value="Sign In"></input>
-      </form>
-      <p class="sign-up" ng-click= "signup=true">
-        No account?
-        <%= link_to "Sign Up!", 'javascript:void(0)' %>
-      </p>
-    </div>
-    <div id="sign-in-form" ng-hide="!!isSignedIn() || !signup">
-      <form ng-submit="signUp()">
-        <input type="text" class="username" placeholder="username" ng-model="inputUsername"></input><input type="password" class="password" placeholder="password" ng-model="inputPassword"></input><input type="submit" value="Sign Up"></input>
-      </form>
-      <p class="sign-up" ng-click= "signup=false">
-        Already have an account?
-        <%= link_to "Sign In!", 'javascript:void(0)' %>
-      </p>
-    </div>
-    <div id="post-form" ng-hide="!isSignedIn()"">
-      <form ng-submit="createPost()">
-        <div class="text-container">
-          <textarea class="content" ng-model="newPostContent" placeholder="your amazing post goes here"></textarea>
-        </div>
-        <div class="form-controls">
-          <input type="submit" value="Post"></input>
-        </div>
-      </form>
+<div ng-controller="AppController">
+  <div class = "navbar navbar-fixed-top" >
+    <div class="navbar-inner" ng-hide="!!isSignedIn() || !!signup" ng-init"signup=false">
+      <div class= "container">
+        <a class="brand" href="#">AnonyPost</a>
+        <form class="navbar-form pull-right nav-collapse collapse", ng-submit="signIn()">
+          <input type="text" class="username" placeholder="username" ng-model="inputUsername"></input>
+          <input type="password" class="password" placeholder="password" ng-model="inputPassword"></input>
+          <input type="submit" value="Sign In"></input>
+        </form>
+        <!--<p class="sign-up" ng-click= "signup=true">
+          No account?
+          <%= link_to "Sign Up!", 'javascript:void(0)' %>
+        </p>-->
+      </div>
+      <div ng-hide="!!isSignedIn() || !signup">
+        <form ng-submit="signUp()">
+          <input type="text" class="username" placeholder="username" ng-model="inputUsername"></input><input type="password" class="password" placeholder="password" ng-model="inputPassword"></input><input type="submit" value="Sign Up"></input>
+        </form>
+        <p class="sign-up" ng-click= "signup=false">
+          Already have an account?
+          <%= link_to "Sign In!", 'javascript:void(0)' %>
+        </p>
+      </div>
+      <div ng-hide="!isSignedIn()"">
+        <form ng-submit="createPost()">
+          <div class="text-container">
+            <textarea class="content" ng-model="newPostContent" placeholder="your amazing post goes here"></textarea>
+          </div>
+          <div class="form-controls">
+            <input type="submit" value="Post"></input>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
-  
-  <div id="main-dish" class = container>
-    <ol class="row unstyled">
-      <li ng-repeat="post in posts" class="card">
-        <div class="vote">
-          <div class="vote_up"  ng-click= "upvote(post)"></div>
-          <div class="vote_total">
-            {{ post.net_upvotes }}
+ 
+  <div class = "container">
+    <div class="row">
+      <ol class = "unstyled">
+        <li ng-repeat="post in posts" class="card">
+          <div class="vote">
+            <div class="vote_up"  ng-click= "upvote(post)"></div>
+            <div class="vote_total">
+              {{ post.net_upvotes }}
+            </div>
+            <div class="vote_down" ng-click= "downvote(post)"></div>
           </div>
-          <div class="vote_down" ng-click= "downvote(post)"></div>
-        </div>
-        
-        <div class="card-body">
-          <pre>{{ post.content }}</pre>
-        </div>
-        <div class="location">
-          <div class="longitude">
-            {{ post.longitude }}
+          
+          <div class="card-body">
+            <pre>{{ post.content }}</pre>
           </div>
-          <div class="latitude">
-            {{ post.latitude }}
+          <div class="location">
+            <div class="longitude">
+              {{ post.longitude }}
+            </div>
+            <div class="latitude">
+              {{ post.latitude }}
+            </div>
           </div>
-        </div>
-        <div class="time">
-          {{ post.created_at }}
-        </div>
-        <div type = "button" class = "delete visible-{{ isOwner(post) }}" ng-click=" delete($index)"> x </div>
-      </li>
-    </ol>
-    
-    
+          <div class="time">
+            {{ post.created_at }}
+          </div>
+          <div type = "button" class = "delete visible-{{ isOwner(post) }}" ng-click=" delete($index)"> x </div>
+        </li>
+      </ol>
+    </div>
   </div>
-</div>
 
-<div id="footer">
-  <p>Made with
-    <%= link_to "Ruby on Rails", 'http://rubyonrails.org/' %>,
-    <%= link_to "CoffeeScript", 'http://coffeescript.org/' %>,
-    <%= link_to "AngularJS", 'http://angularjs.org/' %>,
-    and our own house blend of love and contempt for humanity.
-  </p>
-  <p>
-    <%= link_to "Come work for us", 'http://github.com/benchristel/anonymouspost#contributing' %>!
-    We won't pay you.
-  </p>
+
+  <footer class="footer">
+    <div class="container">
+      <p>Made with
+        <%= link_to "Ruby on Rails", 'http://rubyonrails.org/' %>,
+        <%= link_to "CoffeeScript", 'http://coffeescript.org/' %>,
+        <%= link_to "AngularJS", 'http://angularjs.org/' %>,
+        and our own house blend of love and contempt for humanity.
+      </p>
+      <p>
+        <%= link_to "Come work for us", 'http://github.com/benchristel/anonymouspost#contributing' %>!
+        We won't pay you.
+      </p>
+    </div>
+  </footer>
 </div>
 
 </body>
