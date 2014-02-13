@@ -56,12 +56,12 @@
           <pre>{{ post.content }}</pre>
         </div>
         <div class="location">
-          <div class="longitude">
-            {{ post.longitude }}
-          </div>
-          <div class="latitude">
-            {{ post.latitude }}
-          </div>
+          <span class="distance">
+            {{ post.distance.meters | number:0 }} meters
+          </span>
+          <span class="direction">
+            {{ post.direction }}
+          </span>
         </div>
         <div class="time">
           {{ post.created_at }}

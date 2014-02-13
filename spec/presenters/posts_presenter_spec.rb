@@ -2,7 +2,14 @@ require 'spec_helper'
 
 describe PostsPresenter do
   subject { presenter }
-  let(:presenter) { PostsPresenter.new(post, viewer.key, viewer_longitude, viewer_latitude) }
+  let(:presenter) { PostsPresenter.new(post, viewer) }
+  let(:viewer) do
+    double Viewer,
+      :viewer_longitude => viewer_longitude,
+      :viewer_latitude  => viewer_latitude,
+      :viewer_user      => double(User, :key => viewer_user_key),
+      :viewer_roles     => nil
+  end
   
   let(:post) do
     Post.new(:user_key  => post_author_user_key,
@@ -13,12 +20,11 @@ describe PostsPresenter do
   end
   
   let(:post_author_user_key) { 'panda' }
-  let(:post_longitude) { -120 }
-  let(:post_latitude) { 34 }
+  let(:post_longitude) { -122.4193 }
+  let(:post_latitude) { 37.7756 }
   
-  let(:viewer) { User.new(:key => viewer_user_key) }
-  let(:viewer_longitude) { -123 }
-  let(:viewer_latitude) { 33 }
+  let(:viewer_longitude) { -122.143199 }
+  let(:viewer_latitude) { 37.442174 }
   
   context 'when viewer is not the post author' do
     let(:viewer_user_key) { 'pigeon' }
@@ -28,12 +34,12 @@ describe PostsPresenter do
         :can_edit => false,
         :content => nil,
         :created_at => nil,
-        :direction => :E,
-        :distance => {:meters=>100}, #TODO: the distance is wrong!
+        :direction => :NW,
+        :distance => {:meters=>44340.63813856269},
         :existing_vote => 0,
         :id => nil,
-        :latitude => 34.0,
-        :longitude => -120.0,
+        :latitude => post_latitude,
+        :longitude => post_longitude,
         :net_upvotes => 0,
         :updated_at => nil            
       })

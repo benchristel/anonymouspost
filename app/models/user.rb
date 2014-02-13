@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   include Encryption
+  include Viewer
   
   attr_accessible :key, :key_hash
   attr_accessor :key
@@ -19,11 +20,6 @@ class User < ActiveRecord::Base
     end
   end
   
-  def key=(key)
-    @key = key
-    self.key_hash = User.sha(key)
-  end
-  
   def self.exists_with_key?(key)
     !User.find_by_key_hash(sha(key)).nil?
   end
@@ -38,5 +34,14 @@ class User < ActiveRecord::Base
   
   def self.find_all_by_key(key, *args, &block)
     User.find_all_by_key_hash(sha(key), *args, &block)
+  end
+  
+  def key=(key)
+    @key = key
+    self.key_hash = User.sha(key)
+  end
+  
+  def viewer_user
+    self
   end
 end

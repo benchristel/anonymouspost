@@ -78,6 +78,7 @@ class Post < ActiveRecord::Base
   end
   
   def editable_by?(user)
+    user = user.key if user.is_a? User
     belongs_to? user
   end
   
