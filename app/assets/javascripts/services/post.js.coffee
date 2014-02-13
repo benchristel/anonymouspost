@@ -22,13 +22,13 @@ angular.module('AnonymousApp').factory('Post', ($resource, Session) ->
             
             
         upvote: (attrs) ->
-            @service.$upvote(attrs)
+            @service.$upvote(attrs).$promise
             
         downvote: (attrs) ->
-            @service.$downvote(attrs)
+            @service.$downvote(attrs).$promise
 
         unvote: (attrs) ->
-            @service.$unvote(attrs)
+            @service.$unvote(attrs).$promise
           
             
 )

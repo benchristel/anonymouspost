@@ -4,7 +4,6 @@ angular.module('AnonymousApp').controller 'AppController'
     
     $scope.init = ->
         @postalService = new Post()
-        console.log "Here I am, can't hold onto this"
         #Session = new Session()
         
         
@@ -27,8 +26,14 @@ angular.module('AnonymousApp').controller 'AppController'
                 longitude: Location.longitude
                 latitude:  Location.latitude
             }
-            new Post().create(attrs).then ->
+            promise = new Post().create(attrs)
+            promise.then ->
                 $scope.refresh()
+            promise.catch ->
+                alert 'Server encountered an error and your post was not saved'
+                $scope.newPostContent = $scope.posts[0].content
+                $scope.posts.shift()
+            
                
                 
     $scope.upvote = (post) ->
@@ -40,16 +45,25 @@ angular.module('AnonymousApp').controller 'AppController'
             if post.existing_vote == -1
                 post.net_upvotes = post.net_upvotes + 2
                 post.existing_vote = 1
-                new Post().upvote(attrs)
+                new Post().upvote(attrs).catch ->
+                    alert 'Server encountered an error and your vote was not saved'
+                    post.net_upvotes = post.net_upvotes - 2
+                    post.existing_vote = -1
             else if post.existing_vote == 1
                 post.net_upvotes = post.net_upvotes - 1
                 post.existing_vote = 0
-                new Post().unvote(attrs)
+                new Post().unvote(attrs).catch ->
+                    alert 'Server encountered an error and your vote was not saved'
+                    post.net_upvotes = post.net_upvotes + 1
+                    post.existing_vote = 1
+
             else
                 post.existing_vote = 1
                 post.net_upvotes = post.net_upvotes + 1
-                new Post().upvote(attrs)
-            
+                new Post().upvote(attrs).catch ->
+                    alert 'Server encountered an error and your vote was not saved'
+                    post.existing_vote = 0
+                    post.net_upvotes = post.net_upvotes - 1 
         else
             alert 'You need to sign in to vote!'
     
@@ -63,15 +77,24 @@ angular.module('AnonymousApp').controller 'AppController'
             if post.existing_vote == -1
                 post.net_upvotes = post.net_upvotes + 1
                 post.existing_vote = 0
-                new Post().unvote(post)
+                new Post().unvote(post).catch ->
+                    alert 'Server encountered an error and your vote was not saved'
+                    post.net_upvotes = post.net_upvotes - 1
+                    post.existing_vote = -1
             else if post.existing_vote == 1
                 post.net_upvotes = post.net_upvotes - 2
                 post.existing_vote = -1
-                new Post().downvote(post)
+                new Post().downvote(post).catch ->
+                    alert 'Server encountered an error and your vote was not saved'
+                    post.net_upvotes = post.net_upvotes + 2
+                    post.existing_vote = 1
             else
                 post.existing_vote = -1
                 post.net_upvotes = post.net_upvotes - 1
-                new Post().downvote(attrs)
+                new Post().downvote(attrs).catch ->
+                    alert 'Server encountered an error and your vote was not saved'
+                    post.existing_vote = 0
+                    post.net_upvotes = post.net_upvotes + 1
         else
             alert 'You need to sign in to vote!'
             
