@@ -16,7 +16,7 @@ class PostsController < ApplicationController
       format.html # index.html.erb
       format.json do
         presenters = @posts.map do |post|
-          PostsPresenter.new(post, params[:user_key], params[:longitude], params[:latitude])
+          PostsPresenter.new(post, @me)
         end
         
         render :json => presenters
@@ -72,9 +72,7 @@ class PostsController < ApplicationController
         format.json do
           render json: PostsPresenter.new(
             @post,
-            params[:user_key],
-            params[:post][:longitude],
-            params[:post][:latitude]
+            @me
           ), status: :created, location: @post
         end
         #format.jsÊÊ {}

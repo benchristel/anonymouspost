@@ -30,3 +30,9 @@ RSpec.configure do |config|
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
 end
+
+class RSpec::Mocks::Mock
+  def is_a?(_module)
+    @name.to_s == _module.to_s
+  end
+end
