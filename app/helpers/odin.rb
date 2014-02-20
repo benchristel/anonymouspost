@@ -1,4 +1,9 @@
 class Odin
+  include Viewer
+  delegate :viewer_roles,
+           :viewer_user,
+  :to => :user
+  
   attr_accessor :user
   
   def self.sign_in(user_key)
@@ -12,7 +17,9 @@ class Odin
   end
   
   def initialize(options={})
-    self.user      = options[:user]
+    self.user = options[:user]
+    self.viewer_longitude = options[:longitude]
+    self.viewer_latitude  = options[:latitude]
   end
   
   public

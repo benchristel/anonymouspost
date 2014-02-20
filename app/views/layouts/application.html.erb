@@ -75,13 +75,22 @@
             </span>
             <span type="button" class="delete" ng-hide="!!isOwner(post)" ng-click=" delete($index)">x</span>
           </div>
-          
-          <div class="card-body">
-            {{ post.content }}
-          </div>
-          
-          
-          
+          <div class="vote_down" ng-click= "downvote(post)"></div>
+        </div>
+        
+        <div class="card-body">
+          <pre>{{ post.content }}</pre>
+        </div>
+        <div class="location">
+          <span class="distance">
+            {{ post.distance.meters | number:0 }} meters
+          </span>
+          <span class="direction">
+            {{ post.direction }}
+          </span>
+        </div>
+        <div class="time">
+          {{ post.created_at }}
         </div>
         
       </li>
