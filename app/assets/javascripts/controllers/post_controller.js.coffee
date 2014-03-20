@@ -1,6 +1,5 @@
 angular.module('AnonymousApp').controller 'AppController'
-,       ($scope, $timeout, Post, Session, Location) ->
-    
+,       ($sce, $scope, $timeout, Post, Session, Location) ->
     
     $scope.init = ->
         @postalService = new Post()
@@ -11,6 +10,9 @@ angular.module('AnonymousApp').controller 'AppController'
         Location.getLocation().then ->
             (posts = new Post().all(Location.longitude, Location.latitude)).$promise.then ->
                 $scope.posts = posts
+                for post in posts
+                    post.content = $sce.trustAsHtml(post.content)
+                
                 $scope.newPostContent = ''
                 console.log posts
 

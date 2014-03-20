@@ -24,6 +24,10 @@ class Post < ActiveRecord::Base
     end
   end
   
+  def content=(new_content)
+    super(LinkHighlighter.new(HtmlSanitizer.new(new_content)).to_s)
+  end
+  
   def set_user_hash
     self.user_hash = compute_user_hash if user_key.present?
   end

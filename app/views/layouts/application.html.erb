@@ -52,7 +52,7 @@
   
   <div id="main-dish" class="container">
     <ol class="row unstyled">
-      <li ng-repeat="post in posts">
+      <li ng-repeat="post in posts" >
         <div class="card">
           <div class="card-heading simple">
             <div class="vote">
@@ -79,7 +79,7 @@
         </div>
         
         <div class="card-body">
-          <pre>{{ post.content }}</pre>
+          <pre ng-bind-html="post.content"></pre>
         </div>
         <div class="location">
           <span class="distance">
