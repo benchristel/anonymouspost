@@ -4,6 +4,7 @@
 capybara-*.html
 .rspec
 /.bundle
+/config/database.yml
 /vendor/bundle
 /log/*
 /tmp/*
