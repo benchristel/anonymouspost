@@ -67,6 +67,8 @@ angular.module('AnonymousApp').controller 'AppController'
         else
             alert 'You need to sign in to vote!'
     
+    $scope.formatTime = (time) ->
+        "#{time} was formatted!"
     
     $scope.downvote = (post) ->
         if Session.signedIn
