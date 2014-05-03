@@ -6,7 +6,8 @@ gem 'rails', '3.2.3'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'mysql2'
-
+gem 'twitter', '5.8.0'
+gem 'appconfig', :require => 'app_config'
 
 # Gems used only for assets and not required
 # in production environments by default.

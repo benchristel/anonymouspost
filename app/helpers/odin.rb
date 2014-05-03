@@ -24,6 +24,7 @@ class Odin
   
   public
   def list_posts_near(longitude, latitude)
+    get_posts_from_twitter(longitude, latitude)
     Post.most_relevant(100, near = longitude, latitude)
   end
   
@@ -74,6 +75,16 @@ class Odin
         delta = Vote.vote!(user.key, post, direction)
         post.save! # post's vote total updates automatically on save
       end
+    end
+  end
+  
+  private
+  def get_posts_from_twitter(long, lat)
+    #puts TwitterApi.new.local_tweets(long, lat, 2000)
+    TwitterApi.new.local_tweets(lat, long, 2000).each do |twitter_post|
+      puts twitter_post.text
+      Post.find_or_create_by_tweet_id(twitter_post.id, :latitude => lat, :longitude => long, :user_key => SecureRandom.uuid, :content => twitter_post.text);
+      Post.created_at = Time.parse(twitter_post.created_at)
     end
   end
 end

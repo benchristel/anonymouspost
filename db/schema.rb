@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140102052509) do
+ActiveRecord::Schema.define(:version => 20140503222704) do
 
   create_table "posts", :force => true do |t|
     t.string   "content",         :limit => 720
@@ -23,7 +23,10 @@ ActiveRecord::Schema.define(:version => 20140102052509) do
     t.float    "vote_multiplier",                :default => 1.0, :null => false
     t.datetime "created_at",                                      :null => false
     t.datetime "updated_at",                                      :null => false
+    t.string   "tweet_id"
   end
+
+  add_index "posts", ["tweet_id"], :name => "index_posts_on_tweet_id"
 
   create_table "posts_tags", :force => true do |t|
     t.integer "post_id"
