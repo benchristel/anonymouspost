@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   before_filter :sign_in
-  
+
   # GET /posts
   # GET /posts/near/:longitude/:latitude
   # GET /posts.json
@@ -18,7 +18,7 @@ class PostsController < ApplicationController
         presenters = @posts.map do |post|
           PostsPresenter.new(post, @me)
         end
-        
+
         render :json => presenters
       end
     end
@@ -59,7 +59,7 @@ class PostsController < ApplicationController
         end
       }
     end
-    
+
   end
 
   # POST /posts
@@ -75,13 +75,13 @@ class PostsController < ApplicationController
             @me
           ), status: :created, location: @post
         end
-        #format.jsÊÊ {}
+        #format.jsï¿½ï¿½ {}
       else
         format.json { render json: @post.errors, status: :unprocessable_entity }
       end
     end
   end
-  
+
   def upvote
     puts "BITCH< I BE TRYIN TO VOTE"
     @vote = @me.upvote(params[:id])
@@ -90,14 +90,14 @@ class PostsController < ApplicationController
       if @post
         format.html { redirect_to @post, notice: 'Vote was successfully created.' }
         format.json { render json: @post, status: :created, location: @post }
-        #format.jsÊÊ {}
+        #format.jsï¿½ï¿½ {}
       else
         format.html { render action: "new" }
         format.json { render json: @post.errors, status: :unprocessable_entity }
       end
     end
   end
-  
+
   def downvote
     @vote = @me.downvote(params[:id])
     @post = Post.find_by_id(params[:id])
@@ -105,14 +105,14 @@ class PostsController < ApplicationController
       if @post
         format.html { redirect_to @post, notice: 'Vote was successfully created.' }
         format.json { render json: @post, status: :created, location: @post }
-        #format.jsÊÊ {}
+        #format.jsï¿½ï¿½ {}
       else
         format.html { render action: "new" }
         format.json { render json: @post.errors, status: :unprocessable_entity }
       end
     end
   end
-  
+
   def unvote
     @vote = Odin.sign_in(params[:user_key]).unvote(params[:id])
     @post = Post.find_by_id(params[:id])
