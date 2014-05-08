@@ -70,6 +70,15 @@ class Odin
     vote post_id, 0
   end
 
+  def existing_vote(post)
+    return 0 if user == nil
+    Vote.find_by_hash_components(user.key, post).try(:value) || 0
+  end
+
+  def can_edit?(post)
+    post.editable_by?(user)
+  end
+
   private
   def vote(post_id, direction)
     ActiveRecord::Base.transaction do
@@ -86,8 +95,9 @@ class Odin
     TwitterApi.new.local_tweets(lat, long, 2000).each do |twitter_post|
       post_lat = twitter_post.geo.coordinates[0]
       post_long = twitter_post.geo.coordinates[1]
-      Post.find_or_create_by_tweet_id(twitter_post.id, :latitude => post_lat, :longitude => post_long, :user_key => SecureRandom.uuid, :content => Iconv.conv("UTF8", "LATIN1", twitter_post.text));
-      #Post.created_at = Time.parse(twitter_post.created_at)
+      post = Post.find_or_create_by_tweet_id(twitter_post.id, :latitude => post_lat, :longitude => post_long, :user_key => SecureRandom.uuid, :content => Iconv.conv("UTF8", "LATIN1", twitter_post.text));
+      post.update_column(:created_at, twitter_post.created_at)
+      post.save!
     end
   end
 end
