@@ -1,13 +1,14 @@
-class Post < ActiveRecord::Base
+class Comment < ActiveRecord::Base
   include Location
   include Caches
   include Voting
 
-  attr_accessible :content, :latitude, :longitude, :user_key, :tweet_id
-
+  attr_accessible :content, :latitude, :longitude, :user_key
   has_many :votes, :dependent => :delete_all
-  has_many :comments, :foreign_key => :original_post_id
-
+  belongs_to :parent, :class_name => 'Comment', :foreign_key => :parent_id
+  has_many :replies, :class_name => 'Comment', :foreign_key => :parent_id
+  belongs_to :post, :foreign_key => :original_post_id
+  
   before_save :set_vote_total
 
   validates_presence_of :timestamp
@@ -79,7 +80,7 @@ class Post < ActiveRecord::Base
 
   def belongs_to?(user)
     user = user.key if user.is_a? User
-    user_hash == Encryption.sha(user.to_s + timestamp.to_s)
+    user_hash == Encryption.sha(user.to_s + post_id.to_s)
   end
 
   def editable_by?(user)
@@ -98,32 +99,5 @@ class Post < ActiveRecord::Base
     }
   end
 
-  def direction(long, lat)
-    vector = [
-      longitude - long.to_f,
-      latitude  - lat.to_f,
-    ]
-
-    return :HERE if Math.abs(vector[0]) < 0.001 && Math.abs(vector[1]) < 0.001
-
-    { :N  => [ 0.0,    1.0  ],
-      :NE => [ 0.707,  0.707],
-      :E  => [ 1.0,    0.0  ],
-      :SE => [ 0.707, -0.707],
-      :S  => [ 0.0,   -1.0  ],
-      :SW => [-0.707, -0.707],
-      :W  => [-1.0,    0.0  ],
-      :NW => [-0.707,  0.707],
-      # CATSBY: Where do balloons go, Twisp?
-      # TWISP: *Away*.
-    }.inject([:AWAY, 1_000_000]) do |closest, k, v|
-      dist_squared = (vector[0] - v[0])**2 + (vector[1] - v[1])**2
-      if dist_squared < closest[1]
-        [k, dist_squared]
-      else
-        closest
-      end
-    end[0]
-  end
 
 end
