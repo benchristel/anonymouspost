@@ -87,11 +87,6 @@ class Post < ActiveRecord::Base
     belongs_to? user
   end
 
-  #def vote_total
-  #  cached[:vote_total] ||= (votes.is_a?(Array) ? votes.sum(&:value) : votes.sum(:value))
-  #end
-
-
   def as_json(*args)
     { :net_upvotes => vote_total,
       :content     => content,
