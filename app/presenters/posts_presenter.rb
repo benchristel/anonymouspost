@@ -26,8 +26,6 @@ class PostsPresenter
     meters_per_radian = 6_371_000
     meters_per_degree = meters_per_radian * Math::PI / 180.0
 
-    puts "viewer = #{viewer_latitude.to_f}, #{viewer_longitude.to_f} post = #{post.latitude.to_f}, #{post.longitude.to_f}"
-
     approx = begin
       degrees = Math.sqrt((viewer_latitude.to_f  - post.latitude.to_f) ** 2 + (viewer_longitude.to_f - post.longitude.to_f) ** 2)
       meters = meters_per_degree * degrees
