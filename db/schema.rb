@@ -11,18 +11,18 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140503222704) do
+ActiveRecord::Schema.define(:version => 20140515010043) do
 
   create_table "posts", :force => true do |t|
     t.string   "content",         :limit => 720
-    t.string   "user_hash",       :limit => 64,                   :null => false
-    t.integer  "timestamp",                                       :null => false
-    t.float    "longitude",                                       :null => false
-    t.float    "latitude",                                        :null => false
-    t.integer  "vote_total",                     :default => 0,   :null => false
-    t.float    "vote_multiplier",                :default => 1.0, :null => false
-    t.datetime "created_at",                                      :null => false
-    t.datetime "updated_at",                                      :null => false
+    t.string   "user_hash",       :limit => 64,                                                   :null => false
+    t.integer  "timestamp",                                                                       :null => false
+    t.decimal  "longitude",                      :precision => 16, :scale => 13,                  :null => false
+    t.decimal  "latitude",                       :precision => 16, :scale => 13,                  :null => false
+    t.integer  "vote_total",                                                     :default => 0,   :null => false
+    t.float    "vote_multiplier",                                                :default => 1.0, :null => false
+    t.datetime "created_at",                                                                      :null => false
+    t.datetime "updated_at",                                                                      :null => false
     t.string   "tweet_id"
   end
 

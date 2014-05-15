@@ -5,6 +5,7 @@ capybara-*.html
 .rspec
 /.bundle
 /config/database.yml
+/config/twitter.appconfig.yml
 /vendor/bundle
 /log/*
 /tmp/*
