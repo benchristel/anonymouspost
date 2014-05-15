@@ -7,6 +7,12 @@ describe 'when I view a list of posts, it' do
   let(:latitude) { 33 }
   let(:content) { 'hi' }
   
+  around do |example|
+    Timecop.freeze { example.run }
+  end
+  
+  after { Timecop.return }
+  
   subject(:posts) { me.list_posts_near(longitude, latitude) }
   
   it "displays upvoted posts above posts with no votes" do
@@ -29,7 +35,7 @@ describe 'when I view a list of posts, it' do
   
   it "displays new posts above old posts" do
     me.post(:content => 'old', :longitude => longitude, :latitude => latitude)
-    sleep(2)
+    Timecop.travel(2.seconds.from_now)
     me.post(:content => 'new', :longitude => longitude, :latitude => latitude)
     
     posts.first.content.should == 'new'

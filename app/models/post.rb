@@ -6,6 +6,7 @@ class Post < ActiveRecord::Base
   attr_accessible :content, :latitude, :longitude, :user_key, :tweet_id
 
   has_many :votes, :dependent => :delete_all
+  has_many :comments, :foreign_key => :original_post_id
 
   before_save :set_vote_total
 

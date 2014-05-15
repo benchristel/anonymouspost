@@ -5,7 +5,10 @@ class Comment < ActiveRecord::Base
 
   attr_accessible :content, :latitude, :longitude, :user_key
   has_many :votes, :dependent => :delete_all
-
+  belongs_to :parent, :class_name => 'Comment', :foreign_key => :parent_id
+  has_many :replies, :class_name => 'Comment', :foreign_key => :parent_id
+  belongs_to :post, :foreign_key => :original_post_id
+  
   before_save :set_vote_total
 
   validates_presence_of :timestamp

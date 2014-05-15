@@ -22,6 +22,11 @@ describe 'a Post' do
       :content   => 'oh hello there'
     }
   end
+  let(:user_key) { 'squirrel' }
+  
+  it "has many comments" do
+    expect(post.comments).to be_an Array
+  end
   
   context 'created by user A' do
     let(:user_key) { 'user A' }
