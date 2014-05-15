@@ -30,7 +30,10 @@ describe LinkHighlighter do
   
   context "with a link with no www subdomain" do
     let(:text) { "google.com" }
-    its(:to_s) { should == '<a href="http://google.com">google.com</a>' }
+    its(:to_s) do
+      pending "decide if this is actually a feature"
+      should == '<a href="http://google.com">google.com</a>'
+    end
   end
   
   context "with an emoticon" do
