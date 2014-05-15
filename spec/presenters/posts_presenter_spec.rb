@@ -7,8 +7,9 @@ describe PostsPresenter do
     double Viewer,
       :viewer_longitude => viewer_longitude,
       :viewer_latitude  => viewer_latitude,
-      :viewer_user      => double(User, :key => viewer_user_key),
-      :viewer_roles     => nil
+      :viewer_roles     => nil,
+      :can_edit?        => viewer_can_edit,
+      :existing_vote    => 0
   end
   
   let(:post) do
@@ -27,7 +28,7 @@ describe PostsPresenter do
   let(:viewer_latitude) { 37.442174 }
   
   context 'when viewer is not the post author' do
-    let(:viewer_user_key) { 'pigeon' }
+    let(:viewer_can_edit) { false }
     
     its(:as_json) do
       should eq({
@@ -47,7 +48,7 @@ describe PostsPresenter do
   end
   
   context 'when viewer is the post author' do
-    let(:viewer_user_key) { post_author_user_key }
+    let(:viewer_can_edit) { true }
     
     describe "the json" do
       subject { presenter.as_json }

@@ -3,7 +3,7 @@ class Post < ActiveRecord::Base
   include Encryption
   include Caches
   
-  attr_accessible :content, :latitude, :longitude, :user_key
+  attr_accessible :content, :latitude, :longitude, :user_key, :tweet_id
   
   has_many :votes, :dependent => :delete_all
 
