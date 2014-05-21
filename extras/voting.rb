@@ -1,11 +1,17 @@
 module Voting
+  extend ActiveSupport::Concern
+
+  included do |base|
+    base.before_save :set_vote_total
+    base.has_many :votes, :dependent => :delete_all
+  end
+
   def vote_multiplier
     cached[:vote_multiplier] ||=
     vote_total < 0 ?
           Math::E**(vote_total*VOTE_MULTIPLIER_CONSTANT) :
           (vote_total*VOTE_MULTIPLIER_CONSTANT)+1
   end
-
 
   VOTE_MULTIPLIER_CONSTANT = 0.25
   private
