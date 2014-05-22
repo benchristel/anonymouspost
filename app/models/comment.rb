@@ -1,18 +1,15 @@
 class Comment < ActiveRecord::Base
   include Location
-  include Caches
   include Voting
 
-  attr_accessible :content, :latitude, :longitude, :user_key
-  has_many :votes, :dependent => :delete_all
+  attr_accessible :content, :latitude, :longitude, :user_key, :post
+  attr_accessor :user_hash
   belongs_to :parent, :class_name => 'Comment', :foreign_key => :parent_id
   has_many :replies, :class_name => 'Comment', :foreign_key => :parent_id
   belongs_to :post, :foreign_key => :original_post_id
 
-  before_save :set_vote_total
-
   validates_presence_of :timestamp
-  validates_presence_of :thread_user_hash, original_post_id, parent_comment_id
+  validates_presence_of :thread_user_hash, :original_post_id
   validates_length_of :thread_user_hash, :minimum => 64, :maximum => 64
   #validates :longitude, :numericality => { :greater_than_or_equal_to => -180, :less_than_or_equal_to => 180 }
   #validates :latitude, :numericality => { :greater_than_or_equal_to => -90, :less_than_or_equal_to => 90 }
@@ -36,38 +33,6 @@ class Comment < ActiveRecord::Base
 
   def compute_thread_user_hash(_user_key=user_key)
     Encryption.sha(_user_key.to_s + original_post_id.to_s)
-  end
-
-  DISTANCE_FALLOFF_RATE = 10000.0 # chosen arbitrarily for now
-  POST_HALFLIFE_SECONDS = 3600 * 24.0
-  scope :by_relevance, lambda { |longitude, latitude, time=Time.now|
-    includes(:votes).
-    order(<<-SQL)
-      comment.vote_multiplier /
-      (1 + #{DISTANCE_FALLOFF_RATE} * (POW(comment.longitude - #{longitude.to_f},2) + POW(comment.latitude - #{latitude.to_f},2))) -- distance falloff
-      * POW(2, -(#{time.to_f} - comment.timestamp) / #{POST_HALFLIFE_SECONDS}) -- decay over time
-      DESC
-    SQL
-  }
-
-  METERS_PER_DEGREE = 111000.0 # rough approximation
-  scope :within, lambda { |meters, longitude, latitude|
-    max_degrees_away = meters / METERS_PER_DEGREE
-    where "posts.longitude > ? and posts.longitude < ? and posts.latitude > ? and posts.latitude < ?",
-        longitude - max_degrees_away,
-        longitude + max_degrees_away,
-        latitude - max_degrees_away,
-        latitude + max_degrees_away
-  }
-
-  def self.most_relevant(desired_number_of_posts, longitude, latitude, time=Time.now, page=1, per_page=desired_number_of_posts)
-    meters_away_to_look = 100
-    while Post.within(meters_away_to_look, of=longitude, latitude).count < desired_number_of_posts &&
-          meters_away_to_look < 5_000
-      meters_away_to_look *= 2
-    end
-
-    Post.within(meters_away_to_look, of=longitude, latitude).by_relevance(longitude, latitude, time).limit(per_page).offset(per_page * (page - 1))
   end
 
   def user_key=(key)
@@ -98,6 +63,4 @@ class Comment < ActiveRecord::Base
       :id          => id
     }
   end
-
-
 end

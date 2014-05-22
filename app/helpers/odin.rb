@@ -5,7 +5,6 @@ class Odin
   :to => :user
   require 'iconv'
 
-
   attr_accessor :user
 
   def self.sign_in(user_key)
@@ -56,6 +55,11 @@ class Odin
   alias_method :delete_post, :delete
 
   public
+  def comment(options)
+    Comment.create!(options)
+  end
+
+  public
   def upvote(post_id)
     vote post_id, 1
   end
@@ -83,15 +87,13 @@ class Odin
   def vote(post_id, direction)
     ActiveRecord::Base.transaction do
       Post.find(post_id).tap do |post|
-        delta = Vote.vote!(user.key, post, direction)
-        post.save! # post's vote total updates automatically on save
+        delta = Vote.vote!(user.key, post.referendum, direction)
       end
     end
   end
 
   private
   def get_posts_from_twitter(long, lat)
-    #puts TwitterApi.new.local_tweets(long, lat, 2000)
     TwitterApi.new.local_tweets(lat, long, 2000).each do |twitter_post|
       post_lat = twitter_post.geo.coordinates[0]
       post_long = twitter_post.geo.coordinates[1]

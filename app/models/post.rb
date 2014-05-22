@@ -5,10 +5,7 @@ class Post < ActiveRecord::Base
 
   attr_accessible :content, :latitude, :longitude, :user_key, :tweet_id
 
-  has_many :votes, :dependent => :delete_all
   has_many :comments, :foreign_key => :original_post_id
-
-  before_save :set_vote_total
 
   validates_presence_of :timestamp
   validates_presence_of :user_hash
@@ -40,9 +37,13 @@ class Post < ActiveRecord::Base
   DISTANCE_FALLOFF_RATE = 10000.0 # chosen arbitrarily for now
   POST_HALFLIFE_SECONDS = 3600 * 24.0
   scope :by_relevance, lambda { |longitude, latitude, time=Time.now|
-    includes(:votes).
+    joins(:referendum).
     order(<<-SQL)
-      posts.vote_multiplier /
+      (if(referendums.vote_total < 0,
+           POW(#{Math::E}, referendums.vote_total * 0.25),
+           referendums.vote_total * 0.25 + 1
+         ) -- vote multiplier
+      ) /
       (1 + #{DISTANCE_FALLOFF_RATE} * (POW(posts.longitude - #{longitude.to_f},2) + POW(posts.latitude - #{latitude.to_f},2))) -- distance falloff
       * POW(2, -(#{time.to_f} - posts.timestamp) / #{POST_HALFLIFE_SECONDS}) -- decay over time
       DESC
