@@ -7,6 +7,8 @@ describe 'Viewing a list of posts' do
   let(:latitude) { 33 }
   let(:content) { 'hi' }
 
+  before { TwitterApi.any_instance.stub(:local_tweets).and_return([]) }
+
   around do |example|
     Timecop.freeze { example.run }
   end
