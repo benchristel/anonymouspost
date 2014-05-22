@@ -91,7 +91,6 @@ class Odin
 
   private
   def get_posts_from_twitter(long, lat)
-    #puts TwitterApi.new.local_tweets(long, lat, 2000)
     TwitterApi.new.local_tweets(lat, long, 2000).each do |twitter_post|
       post_lat = twitter_post.geo.coordinates[0]
       post_long = twitter_post.geo.coordinates[1]

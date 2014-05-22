@@ -31,7 +31,6 @@ describe LinkHighlighter do
   context "with a link with no www subdomain" do
     let(:text) { "google.com" }
     its(:to_s) do
-      pending "decide if this is actually a feature"
       should == '<a href="http://google.com">google.com</a>'
     end
   end
@@ -39,5 +38,15 @@ describe LinkHighlighter do
   context "with an emoticon" do
     let(:text) { "o.o" }
     its(:to_s) { should == 'o.o' }
+  end
+  
+  context "with a nonexistent top-level domain" do
+    let(:text) { "foo.whdafuq" }
+    its(:to_s) { should == 'foo.whdafuq' }
+  end
+  
+  context "with query params" do
+    let(:text) { "go to google.com?magic=yes&more_magic=no okay" }
+    its(:to_s) { should == 'go to <a href="http://google.com?magic=yes&more_magic=no">google.com?magic=yes&more_magic=no</a> okay' }
   end
 end
