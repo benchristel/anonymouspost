@@ -27,12 +27,12 @@ class Comment < ActiveRecord::Base
     super(LinkHighlighter.new(HtmlSanitizer.new(new_content)).to_s)
   end
 
-  def set_user_hash
-    self.user_hash = compute_user_hash if user_key.present?
+  def set_thread_user_hash
+    self.thread_user_hash = compute_user_hash if user_key.present?
   end
 
   def compute_user_hash(_user_key=user_key)
-    Encryption.sha(_user_key.to_s + timestamp.to_s)
+    Encryption.sha(_user_key.to_s + original_post_id.to_s)
   end
 
   DISTANCE_FALLOFF_RATE = 10000.0 # chosen arbitrarily for now
@@ -77,7 +77,7 @@ class Comment < ActiveRecord::Base
 
   def belongs_to?(user)
     user = user.key if user.is_a? User
-    user_hash == Encryption.sha(user.to_s + post_id.to_s)
+    user_hash == Encryption.sha(user.to_s + original_post_id.to_s)
   end
 
   def editable_by?(user)
