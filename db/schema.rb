@@ -11,13 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140515010043) do
+ActiveRecord::Schema.define(:version => 20140522032537) do
 
   create_table "comments", :force => true do |t|
     t.integer  "original_post_id",                                                                 :null => false
     t.integer  "parent_comment_id"
     t.string   "content",           :limit => 720
-    t.string   "thread_user_hash",  :limit => 10,                                                  :null => false
+    t.string   "thread_user_hash",  :limit => 64,                                                  :null => false
     t.integer  "timestamp",                                                                        :null => false
     t.decimal  "longitude",                        :precision => 10, :scale => 0
     t.decimal  "latitude",                         :precision => 10, :scale => 0
