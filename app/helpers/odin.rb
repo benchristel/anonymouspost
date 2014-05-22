@@ -56,6 +56,11 @@ class Odin
 
   public
   def comment(options)
+    options = options.reverse_merge(
+      :user_key  => user.key
+    )
+    options[:parent] = options.delete(:comment) if options[:comment]
+    options[:post] = options[:parent].post if options[:parent]
     Comment.create!(options)
   end
 

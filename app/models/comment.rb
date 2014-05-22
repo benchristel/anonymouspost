@@ -2,10 +2,10 @@ class Comment < ActiveRecord::Base
   include Location
   include Voting
 
-  attr_accessible :content, :latitude, :longitude, :user_key, :post
+  attr_accessible :content, :latitude, :longitude, :user_key, :post, :parent
   attr_accessor :user_hash
-  belongs_to :parent, :class_name => 'Comment', :foreign_key => :parent_id
-  has_many :replies, :class_name => 'Comment', :foreign_key => :parent_id
+  belongs_to :parent, :class_name => 'Comment', :foreign_key => :parent_comment_id
+  has_many :replies, :class_name => 'Comment', :foreign_key => :parent_comment_id
   belongs_to :post, :foreign_key => :original_post_id
 
   validates_presence_of :timestamp
