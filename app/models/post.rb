@@ -10,13 +10,13 @@ class Post < ActiveRecord::Base
   validates_presence_of :timestamp
   validates_presence_of :user_hash
   validates_length_of :user_hash, :minimum => 64, :maximum => 64
-  #validates :longitude, :numericality => { :greater_than_or_equal_to => -180, :less_than_or_equal_to => 180 }
-  #validates :latitude, :numericality => { :greater_than_or_equal_to => -90, :less_than_or_equal_to => 90 }
+  validates :longitude, :numericality => { :greater_than_or_equal_to => -180, :less_than_or_equal_to => 180 }
+  validates :latitude, :numericality => { :greater_than_or_equal_to => -90, :less_than_or_equal_to => 90 }
   validates :timestamp, :numericality => true
 
   before_validation :before_validation_cb
   def before_validation_cb
-    if timestamp.nil?
+    if new_record?
       self.timestamp = Time.new.to_i
       set_user_hash
     end
