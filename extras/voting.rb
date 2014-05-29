@@ -5,12 +5,11 @@ module Voting
     base.belongs_to :referendum
     base.has_many   :votes, :through => :referendum
     base.before_create :save_referendum
+    base.after_initialize :initialize_referendum
   end
 
-  def initialize(*args)
-    super.tap do
-      self.referendum ||= Referendum.new
-    end
+  def initialize_referendum
+    self.referendum ||= Referendum.new
   end
 
   def save_referendum

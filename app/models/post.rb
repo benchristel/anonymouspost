@@ -5,14 +5,27 @@ class Post < ActiveRecord::Base
 
   attr_accessible :content, :latitude, :longitude, :user_key, :tweet_id
 
-  has_many :comments, :foreign_key => :original_post_id
+  has_many  :comments, :foreign_key => :original_post_id
 
+  has_and_belongs_to_many :tags
   validates_presence_of :timestamp
   validates_presence_of :user_hash
   validates_length_of :user_hash, :minimum => 64, :maximum => 64
   validates :longitude, :numericality => { :greater_than_or_equal_to => -180, :less_than_or_equal_to => 180 }
   validates :latitude, :numericality => { :greater_than_or_equal_to => -90, :less_than_or_equal_to => 90 }
   validates :timestamp, :numericality => true
+
+  # editable stuff
+  belongs_to :editable
+  has_many  :edits, :through => :editable
+  after_initialize :initialize_editable
+  def initialize_editable
+    self.editable ||= Editable.new
+  end
+  before_create :save_editable
+  def save_editable
+    editable.save
+  end
 
   before_validation :before_validation_cb
   def before_validation_cb

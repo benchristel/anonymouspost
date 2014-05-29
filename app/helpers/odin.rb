@@ -25,7 +25,7 @@ class Odin
 
   public
   def list_posts_near(longitude, latitude)
-    get_posts_from_twitter(longitude, latitude)
+    #get_posts_from_twitter(longitude, latitude)
     Post.most_relevant(100, near = longitude, latitude)
   end
 
@@ -34,14 +34,25 @@ class Odin
     options = options.reverse_merge(
       :user_key  => user.key
     )
-    post = Post.create!(options)
-    tag  = Tag.find_or_create({:text => "hash"})
-    args = {
-      :post_id => post.id,
-      :tag_id => tag.id
-    }
-    PostsTag.create!(args)
+    post = Post.create!(options.except(:tags))
+    (options[:tags] || []).each do |text|
+      tag  = Tag.find_or_create({:text => text})
+      args = {
+        :post_id => post.id,
+        :tag_id => tag.id
+      }
+      PostsTag.create!(args)
+    end
     post
+  end
+
+  public
+  def edit(post_id, options = {})
+    post = Post.find post_id
+    if post.belongs_to?(user)
+    #  edit  = Edit.create!()
+      post.editable.edits.create({:content => options[:content]})
+    end
   end
 
   public

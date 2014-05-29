@@ -8,6 +8,7 @@ class Comment < ActiveRecord::Base
   has_many :replies, :class_name => 'Comment', :foreign_key => :parent_comment_id
   belongs_to :post, :foreign_key => :original_post_id
 
+
   validates_presence_of :timestamp
   validates_presence_of :thread_user_hash, :original_post_id
   validates_length_of :thread_user_hash, :minimum => 64, :maximum => 64
