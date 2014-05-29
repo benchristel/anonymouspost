@@ -5,7 +5,6 @@ class Odin
   :to => :user
   require 'iconv'
 
-
   attr_accessor :user
 
   def self.sign_in(user_key)
@@ -56,6 +55,16 @@ class Odin
   alias_method :delete_post, :delete
 
   public
+  def comment(options)
+    options = options.reverse_merge(
+      :user_key  => user.key
+    )
+    options[:parent] = options.delete(:comment) if options[:comment]
+    options[:post] = options[:parent].post if options[:parent]
+    Comment.create!(options)
+  end
+
+  public
   def upvote(post_id)
     vote post_id, 1
   end
@@ -83,8 +92,7 @@ class Odin
   def vote(post_id, direction)
     ActiveRecord::Base.transaction do
       Post.find(post_id).tap do |post|
-        delta = Vote.vote!(user.key, post, direction)
-        post.save! # post's vote total updates automatically on save
+        delta = Vote.vote!(user.key, post.referendum, direction)
       end
     end
   end
