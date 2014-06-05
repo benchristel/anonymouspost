@@ -11,13 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140522152834) do
+ActiveRecord::Schema.define(:version => 20140529044509) do
 
   create_table "comments", :force => true do |t|
     t.integer  "original_post_id",                                                                 :null => false
     t.integer  "parent_comment_id"
     t.string   "content",           :limit => 720
-    t.string   "thread_user_hash",  :limit => 10,                                                  :null => false
+    t.string   "thread_user_hash",  :limit => 64,                                                  :null => false
     t.integer  "timestamp",                                                                        :null => false
     t.decimal  "longitude",                        :precision => 10, :scale => 0
     t.decimal  "latitude",                         :precision => 10, :scale => 0
@@ -26,6 +26,19 @@ ActiveRecord::Schema.define(:version => 20140522152834) do
     t.datetime "created_at",                                                                       :null => false
     t.datetime "updated_at",                                                                       :null => false
     t.integer  "referendum_id"
+    t.integer  "editable_id"
+  end
+
+  create_table "editables", :force => true do |t|
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "edits", :force => true do |t|
+    t.text     "content",     :null => false
+    t.integer  "editable_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "posts", :force => true do |t|
@@ -38,6 +51,7 @@ ActiveRecord::Schema.define(:version => 20140522152834) do
     t.datetime "updated_at",                                                   :null => false
     t.string   "tweet_id"
     t.integer  "referendum_id"
+    t.integer  "editable_id"
   end
 
   add_index "posts", ["tweet_id"], :name => "index_posts_on_tweet_id"

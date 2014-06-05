@@ -44,9 +44,22 @@ describe 'Viewing a list of posts' do
   end
 
   it "displays nearby posts above distant posts" do
-    me.post(:content => 'far', :longitude => longitude, :latitude => latitude + 1)
+    me.post(:content => 'far', :longitude => longitude, :latitude => latitude + 0.01)
     me.post(:content => 'near', :longitude => longitude, :latitude => latitude)
 
     posts.first.content.should == 'near'
+  end
+
+  it "displays tags" do
+    me.post(:content => 'Jafar', :longitude => longitude, :latitude => latitude, :tags => ["Brony!"])
+
+    posts.first.tags.first.text.should eq "Brony!"
+  end
+
+  it "displays edits" do
+    post_id = me.post(:content => 'Jafar', :longitude => longitude, :latitude => latitude, :tags => ["Brony!"])
+    me.edit(post_id, :content => "farts butts")
+
+    posts.first.edits.first.content.should eq "farts butts"
   end
 end

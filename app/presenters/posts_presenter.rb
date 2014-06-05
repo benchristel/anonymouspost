@@ -1,19 +1,25 @@
 class PostsPresenter
-  attr_accessor :post, :viewer
+  attr_accessor :post, :viewer, :init_options
 
-  def initialize(post, viewer)
+  def initialize(post, viewer, init_options = {})
     self.post   = post
     self.viewer = viewer
+    self.init_options = init_options
   end
 
   public
   def as_json(options={})
-    post.as_json.merge(
-      :distance      => {:meters => distance_meters},
-      :direction     => direction,
-      :can_edit      => viewer.can_edit?(post),
-      :existing_vote => viewer.existing_vote(post)
-    )
+    post.as_json.tap { |json|
+      json.merge!(
+        :distance      => {:meters => distance_meters},
+        :direction     => direction,
+        :can_edit      => viewer.can_edit?(post),
+        :existing_vote => viewer.existing_vote(post),
+        :tags          => post.tags
+
+      )
+      json.merge!(:comments => post.comments) if init_options[:comments]
+    }
   end
 
   public
