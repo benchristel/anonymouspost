@@ -14,7 +14,8 @@ class PostsPresenter
         :distance      => {:meters => distance_meters},
         :direction     => direction,
         :can_edit      => viewer.can_edit?(post),
-        :existing_vote => viewer.existing_vote(post)
+        :existing_vote => viewer.existing_vote(post),
+        :tags          => post.tags
 
       )
       json.merge!(:comments => post.comments) if init_options[:comments]

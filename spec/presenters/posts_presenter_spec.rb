@@ -42,7 +42,8 @@ describe PostsPresenter do
         :latitude => post_latitude,
         :longitude => post_longitude,
         :net_upvotes => 0,
-        :updated_at => nil
+        :updated_at => nil,
+        :tags => []
       })
     end
   end
