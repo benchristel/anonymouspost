@@ -1,17 +1,68 @@
-body {
-    padding-top: 100px;
+* {
+  margin: 0px;
+  padding: 0px;
+  font-family: Verdana, sans-serif;
+  font-color: #222;
 }
 
-.card {
-    .card-heading.simple {
-        font-size: 16px;
+#form-header {
+    padding-bottom: 10px;
+    border-bottom: 2px solid #bbb;
+
+    #sign-in-form, #sign-up-form {
+        margin-left: auto;
+        margin-right: auto;
+        width: 900px;
     }
 }
+
+ol {
+  width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+
+  li {
+    list-style: none;
+    border-bottom: 1px solid #ccc;
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+    .longitude, .latitude {
+      border-left: 1px solid #ccc;
+      padding-left: 15px;
+      padding-right: 15px;
+      display: none;
+    }
+
+    div.vote, div.location, div.time {
+      display: inline;
+    }
+
+    div.vote {
+      span {
+        font-size: 16px;
+      }
+
+      width: 80px;
+    }
+
+    div.time, span {
+      font-size: 10px;
+      color: #ccc;
+    }
+
+    pre {
+      font-size: 16px
+    }
+  }
+}
+
+
 
 .vote-up {
     cursor: pointer;
     color: #3a3;
-    
+
     &:hover {
         color: #0d0;
     }
@@ -21,7 +72,7 @@ body {
 .vote-down {
     cursor: pointer;
     color: #c33;
-    
+
     &:hover {
         color: #f00;
     }
