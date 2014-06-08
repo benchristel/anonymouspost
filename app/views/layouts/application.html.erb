@@ -13,30 +13,11 @@
   <div id="form-header" class="navbar navbar-fixed-top">
     <div class="navbar-inner">
       <div class="container">
-        <div id="sign-in-form" ng-hide="!!isSignedIn() || !!signup" ng-init"signup=false">
-          <a class="brand" href="#">AnonyPost</a>
-          <form ng-submit="signIn()" class="navbar-form pull-right nav-collapse collapse">
-            <input type="text" class="username" placeholder="username" ng-model="inputUsername"></input>
-            <input type="password" class="password" placeholder="password" ng-model="inputPassword"></input>
-            <input type="submit" value="Sign In" class="btn btn-small"></input>
-          </form>
-          <p class="sign-up" ng-click= "signup=true">
-            No account?
-            <%= link_to "Sign Up!", 'javascript:void(0)' %>
-          </p>
-        </div>
-        <div id="sign-in-form" ng-hide="!!isSignedIn() || !signup">
-          <form ng-submit="signUp()" class="navbar-form pull-right nav-collapse collapse">
-            <input type="text" class="username" placeholder="username" ng-model="inputUsername"></input>
-            <input type="password" class="password" placeholder="password" ng-model="inputPassword"></input>
-            <input type="submit" value="Sign Up"></input>
-          </form>
-          <p class="sign-up" ng-click= "signup=false">
-            Already have an account?
-            <%= link_to "Sign In!", 'javascript:void(0)' %>
-          </p>
-        </div>
-        <div id="post-form" ng-hide="!isSignedIn()"">
+        <button ng-click='toggleModal()'> Log In</button>
+        <modal-dialog show='modalShown' width='750px' height='60%'>
+          <p>Log In!<p>
+        </modal-dialog>
+        <div id="post-form" ng-hide="!isSignedIn()">
           <form ng-submit="createPost()">
             <div class="text-container">
               <textarea class="content" ng-model="newPostContent" placeholder="your amazing post goes here"></textarea>
@@ -51,6 +32,7 @@
   </div>
 
   <div id="main-dish" class="container">
+
     <ol class="row unstyled">
       <li ng-repeat="post in posts" >
         <div class="card">
@@ -113,5 +95,31 @@
   </p>
 </div>
 
+
 </body>
 </html>
+
+
+<!-- <div id="sign-in-form" ng-hide="!!isSignedIn() || !!signup" ng-init"signup=false">
+  <a class="brand" href="#">AnonyPost</a>
+  <form ng-submit="signIn()" class="navbar-form pull-right nav-collapse collapse">
+    <input type="text" class="username" placeholder="username" ng-model="inputUsername"></input>
+    <input type="password" class="password" placeholder="password" ng-model="inputPassword"></input>
+    <input type="submit" value="Sign In" class="btn btn-small"></input>
+  </form>
+  <p class="sign-up" ng-click= "signup=true">
+    No account?
+    <%= link_to "Sign Up!", 'javascript:void(0)' %>
+  </p>
+</div>
+<div id="sign-in-form" ng-hide="!!isSignedIn() || !signup">
+  <form ng-submit="signUp()" class="navbar-form pull-right nav-collapse collapse">
+    <input type="text" class="username" placeholder="username" ng-model="inputUsername"></input>
+    <input type="password" class="password" placeholder="password" ng-model="inputPassword"></input>
+    <input type="submit" value="Sign Up"></input>
+  </form>
+  <p class="sign-up" ng-click= "signup=false">
+    Already have an account?
+    <%= link_to "Sign In!", 'javascript:void(0)' %>
+  </p>
+</div> -->

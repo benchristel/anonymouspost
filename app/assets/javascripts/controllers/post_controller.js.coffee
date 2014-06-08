@@ -6,6 +6,12 @@ angular.module('AnonymousApp').controller 'AppController'
         #Session = new Session()
 
 
+
+    $scope.modalShown = false;
+    
+    $scope.toggleModal = ->
+      $scope.modalShown = !$scope.modalShown
+
     $scope.refresh = ->
         Location.getLocation().then ->
             (posts = new Post().all(Location.longitude, Location.latitude)).$promise.then ->
