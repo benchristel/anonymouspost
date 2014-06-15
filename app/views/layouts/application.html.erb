@@ -13,10 +13,7 @@
   <div id="form-header" class="navbar navbar-fixed-top">
     <div class="navbar-inner">
       <div class="container">
-        <button ng-click='toggleModal()'> Log In</button>
-        <modal-dialog show='modalShown' width='750px' height='60%'>
-          <p>Log In!<p>
-        </modal-dialog>
+        <button ng-click='logInModal.launch()'> Log In</button>
         <div id="post-form" ng-hide="!isSignedIn()">
           <form ng-submit="createPost()">
             <div class="text-container">

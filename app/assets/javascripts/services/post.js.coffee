@@ -6,29 +6,29 @@ angular.module('AnonymousApp').factory('Post', ($resource, Session) ->
                 $downvote: {method:'PUT', url: '/posts/:id/downvote.json'},
                 $unvote: {method:'PUT', url: '/posts/:id/unvote.json'}
             })
-            
-        
+
+
         all: (longitude, latitude) ->
             @service.query(longitude: longitude, latitude: latitude)
-            
+
         create: (attrs) ->
             console.log Session.key
             promise = new @service(post: attrs).$save (post) ->
                 attrs.id = post.id
             promise
-            
+
         delete: (attrs) ->
             promise = new @service(attrs).$delete()
-            
-            
+
+
         upvote: (attrs) ->
             @service.$upvote(attrs).$promise
-            
+
         downvote: (attrs) ->
             @service.$downvote(attrs).$promise
 
         unvote: (attrs) ->
             @service.$unvote(attrs).$promise
-          
-            
+
+
 )
