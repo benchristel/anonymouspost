@@ -17,7 +17,6 @@
 }
 
 ol {
-  width: 900px;
   margin-left: auto;
   margin-right: auto;
 
@@ -57,25 +56,22 @@ ol {
   }
 }
 
-
-
-.vote-up {
-    cursor: pointer;
-    color: #3a3;
-
-    &:hover {
-        color: #0d0;
-    }
+.vote-up, .vote-down {
+  cursor: pointer;
+  background-image: url('arrow.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  height: 30px;
+  width: 50px;
 }
 
-
 .vote-down {
-    cursor: pointer;
-    color: #c33;
-
-    &:hover {
-        color: #f00;
-    }
+    -moz-transform: scaleY(-1);
+    -o-transform: scaleY(-1);
+    -webkit-transform: scaleY(-1);
+    transform: scaleY(-1);
+    filter: FlipV;
+    -ms-filter: "FlipV";
 }
 
 .ng-modal-overlay {
