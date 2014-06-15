@@ -12,8 +12,8 @@
 <div id="app-container" class="container-fluid" ng-controller="AppController">
   <div id="header" class="row">
     <ul>
-      <li><button ng-click='logInModal.launch()' ng-hide='!!isSignedIn()'> Log In</button></li>
-      <li><button ng-click='signUpModal.launch()' ng-hide='!!isSignedIn()'> Sign Up</button></li>
+      <li><button class="btn btn-default" ng-click='logInModal.launch()' ng-hide='!!isSignedIn()'> Log In</button></li>
+      <li><button class="btn btn-primary" ng-click='signUpModal.launch()' ng-hide='!!isSignedIn()'> Sign Up</button></li>
     </ul>
   </div>
 
@@ -28,8 +28,8 @@
           <div class="vote-total">
             {{ post.net_upvotes }}
           </div>
-          <div class="vote-up"  ng-click= "upvote(post)">+</div>
-          <div class="vote-down" ng-click= "downvote(post)">-</div>
+          <div class="vote-up"  ng-click= "upvote(post)"></div>
+          <div class="vote-down" ng-click= "downvote(post)"></div>
         </div>
         <span type="button" class="delete" ng-show="!!isOwner(post)" ng-click=" delete($index)">x</span>
         <div ng-bind-html="post.content"></div>

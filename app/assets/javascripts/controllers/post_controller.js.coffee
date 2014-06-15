@@ -1,4 +1,4 @@
-angular.module('AnonymousApp', ['dialogs', 'ui.bootstrap', 'ngResource']).controller('AppController'
+angular.module('AnonymousApp').controller('AppController'
 ,       ($sce, $scope, $timeout, $dialogs, Post, Session, Location) ->
 
     $scope.init = ->
@@ -175,42 +175,4 @@ angular.module('AnonymousApp', ['dialogs', 'ui.bootstrap', 'ngResource']).contro
     $scope.refresh()
     $scope.init()
 
-).controller("loginCtrl", ($scope, $modalInstance, data) ->
-  $scope.user = name: ""
-  $scope.user = password: ""
-  $scope.cancel = ->
-    $modalInstance.dismiss "canceled"
-    return
-
-  $scope.save = ->
-    promise = Session.signIn($scope.inputUsername, $scope.inputPassword)
-    promise.catch ->
-        alert "This account doesn't exist"
-    $modalInstance.close $scope.user.name
-
-  $scope.hitEnter = (evt) ->
-    $scope.save()  if angular.equals(evt.keyCode, 13) and not (angular.equals($scope.name, null) or angular.equals($scope.name, ""))
-    return
-
-  return
-).controller("signupCtrl", ($scope, $modalInstance, data) ->
-  $scope.user = name: ""
-  $scope.cancel = ->
-    $modalInstance.dismiss "canceled"
-    return
-
-  $scope.save = ->
-    $modalInstance.close $scope.user.name
-    return
-
-  $scope.hitEnter = (evt) ->
-    $scope.save()  if angular.equals(evt.keyCode, 13) and not (angular.equals($scope.name, null) or angular.equals($scope.name, ""))
-    return
-
-  return
-)#.run [
-#   "$templateCache"
-#   ($templateCache) ->
-#     $templateCache.put "/dialogs/login.html", "<div class=\"modal\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><h4 class=\"modal-title\"><span class=\"glyphicon glyphicon-star\"></span> Log In </h4></div><div class=\"modal-body\"><ng-form name=\"nameDialog\" novalidate role=\"form\"><div class=\"form-group input-group-lg\" ng-class=\"{true: 'has-error'}[nameDialog.username.$dirty && nameDialog.username.$invalid]\"><label class=\"control-label\" for=\"username\">Name:</label><input type=\"text\" class=\"form-control\" name=\"username\" id=\"username\" ng-model=\"user.name\" ng-keyup=\"hitEnter($event)\" required><span class=\"help-block\">Enter your full name, first &amp; last.</span></div></ng-form></div><div class=\"modal-footer\"><button type=\"button\" class=\"btn btn-default\" ng-click=\"cancel()\">Cancel</button><button type=\"button\" class=\"btn btn-primary\" ng-click=\"save()\" ng-disabled=\"(nameDialog.$dirty && nameDialog.$invalid) || nameDialog.$pristine\">Save</button></div></div></div></div>"
-#     $templateCache.put "/dialogs/signup.html", "<div class=\"modal\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><h4 class=\"modal-title\"><span class=\"glyphicon glyphicon-star\"></span> Sign Up </h4></div><div class=\"modal-body\"><ng-form name=\"nameDialog\" novalidate role=\"form\"><div class=\"form-group input-group-lg\" ng-class=\"{true: 'has-error'}[nameDialog.username.$dirty && nameDialog.username.$invalid]\"><label class=\"control-label\" for=\"username\">Name:</label><input type=\"text\" class=\"form-control\" name=\"username\" id=\"username\" ng-model=\"user.name\" ng-keyup=\"hitEnter($event)\" required><span class=\"help-block\">Enter your full name, first &amp; last.</span></div></ng-form></div><div class=\"modal-footer\"><button type=\"button\" class=\"btn btn-default\" ng-click=\"cancel()\">Cancel</button><button type=\"button\" class=\"btn btn-primary\" ng-click=\"save()\" ng-disabled=\"(nameDialog.$dirty && nameDialog.$invalid) || nameDialog.$pristine\">Save</button></div></div></div></div>"
-# ]
+)

@@ -1,4 +1,4 @@
-app = angular.module('AnonymousApp', ['ngResource'])
+app = angular.module('AnonymousApp', ['dialogs', 'ui.bootstrap', 'ngResource'])
 
 app.config ($httpProvider) ->
     authToken = $("meta[name=\"csrf-token\"]").attr("content")
