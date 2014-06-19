@@ -1,6 +1,8 @@
 angular.module('AnonymousApp').controller('AppController'
 ,       ($sce, $scope, $timeout, $dialogs, Post, Session, Location) ->
 
+    $scope.isCollapsed = true
+
     $scope.init = ->
         @postalService = new Post()
         #Session = new Session()

@@ -9,18 +9,39 @@
 </head>
 <body>
 
-<div id="app-container" class="container-fluid" ng-controller="AppController">
-  <div id="header" class="row">
-    <ul>
-      <li><button class="btn btn-default" ng-click='logInModal.launch()' ng-hide='!!isSignedIn()'> Log In</button></li>
-      <li><button class="btn btn-primary" ng-click='signUpModal.launch()' ng-hide='!!isSignedIn()'> Sign Up</button></li>
-      <li><button class="btn btn-primary" ng-click='postModal.launch()' ng-show='!!isSignedIn()'> Post</button></li>
-
-    </ul>
+<div id="app-container"  ng-controller="AppController">
+  <header class="navbar navbar-static-top bs-docs-nav navbar-inverse" id="top" role="banner">
+    <div class="container">
+      <div class="navbar-header">
+        <button class="navbar-toggle" type="button"  ng-click="isCollapsed = !isCollapsed">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a href="../" class="navbar-brand">Anonypost</a>
+      </div>
+      <nav collapse="isCollapsed" class="collapse navbar-collapse bs-navbar-collapse" >
+        <ul class="nav navbar-nav navbar-right">
+          <li><a ng-click='logInModal.launch()' ng-hide='!!isSignedIn()'>Log In</a></li>
+          <li><a ng-click='signUpModal.launch()' ng-hide='!!isSignedIn()'>Sign Up</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+<!-- </header>
+  <div id="header" class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <button class="btn btn-navbar" ng-click='logInModal.launch()' ng-hide='!!isSignedIn()'> Log In</button>
+        <button class="btn btn-navbar" ng-click='signUpModal.launch()' ng-hide='!!isSignedIn()'> Sign Up</button>
+        <button class="btn btn-navbar" ng-click='postModal.launch()' ng-show='!!isSignedIn()'> Post</button>
+      </div>
+    </div>
   </div>
 
   <div id="navbar" class="row">
-  </div>
+  </div> -->
 
   <div id="main-dish" class="container">
 
