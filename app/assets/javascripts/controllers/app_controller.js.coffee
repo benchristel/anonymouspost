@@ -7,55 +7,8 @@ angular.module('AnonymousApp').controller('AppController'
         @postalService = new Post()
         #Session = new Session()
 
-    $scope.signUpModal = {
-      launch:  ->
-        dlg = $dialogs.create("/dialogs/signup.html", "signupCtrl", {},
-          key: false
-          back: "static"
-        )
-        dlg.result.then ((name) ->
-          $scope.name = name
-          $scope.refresh()
-          return
-        ), ->
-          $scope.name = "Fuck you."
-          return
-    }
-
-
-    $scope.logInModal = {
-      launch:  ->
-        dlg = $dialogs.create("/dialogs/login.html", "loginCtrl", {},
-          key: false
-          back: "static"
-        )
-        dlg.result.then ((name) ->
-          $scope.name = name
-          $scope.refresh()
-          return
-        ), ->
-          $scope.name = "You decided not to enter in your name, that makes me sad."
-          return
-    }
-
-    $scope.postModal = {
-      launch:  ->
-        dlg = $dialogs.create("/dialogs/post.html", "postCtrl", {},
-          key: false
-          back: "static"
-        )
-        dlg.result.then ((postage) ->
-          console.log(postage)
-          shallow_post = {content: $sce.trustAsHtml(postage), created_at: new Date(),  net_upvotes: 0}
-          $scope.posts.unshift(shallow_post)
-          $scope.refresh()
-          return
-
-        ), ->
-          $scope.name = "You decided not to enter in your name, that makes me sad."
-          return
-    }
-
+    $scope.myfunc = ->
+      console.log("FUNKE")
 
     $scope.refresh = ->
         Location.getLocation().then ->

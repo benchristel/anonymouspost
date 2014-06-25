@@ -14,5 +14,9 @@
 //= require jquery_ujs
 //= require angular
 //= require angular-resource.min
+//= require snap
+//= require angular-snap
+//= require collapse
+//= require transition
 //= require ./global
 //= require_tree .

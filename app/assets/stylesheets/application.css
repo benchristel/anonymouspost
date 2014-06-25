@@ -10,6 +10,7 @@
  *
  *= require bootstrap-theme
  *= require bootstrap
+ *= require angular-snap
  *= require_self
  *= require_tree .
 */
