@@ -2,27 +2,70 @@
 <html>
 <head>
   <title>AnonyPost</title>
-  <script type="application/javascript" src="jquery-2.1.1.js"></script>
+  <script type="application/javascript" src="jquery-2.0.0.js"></script>
   <script type="application/javascript" src="handlebars-v1.3.0.js"></script>
-  <script type="application/javascript" src="ember.prod.js"></script>
+  <script type="application/javascript" src="ember.js"></script>
   <script type="application/javascript">
-    $('body').ready(function() {
-      var renderPost = function(post) {
-        return "<p>"+post.content+"</p>"
-      }
+    var Anonypost = Ember.Application.create()
+    var App = Anonypost
 
+  </script>
+  <script type="application/javascript" src="ember-data.js"></script>
 
-      $.get("/posts.json", function(posts) {
-        rendered = posts.map(function(post) {
-          return renderPost(post)
-        }).join("")
-        $('#posts').html(rendered)
-      })
+  <script type="application/javascript">
+    App.Store = DS.Store.extend({
+      adapter: DS.RESTAdapter.create()
+    });
+
+    Anonypost.Post = DS.Model.extend({
+      content: DS.attr('string')
+    });
+
+    Anonypost.Router.map(function() {
+      //this.route("posts", { path: "/"})
+      this.resource('posts')
+      this.route("test", { path: "/test" })
     })
+
+    Anonypost.PostsRoute = Ember.Route.extend({
+    //   model: function() {
+    //     var artistObjects = [];
+    //     Ember.$.getJSON('http://localhost:3000/posts', function(posts) {
+    //       posts.forEach(function(data) {
+    //         artistObjects.pushObject(App.Post.createRecord(data));
+    //       });
+    //     });
+    //   return artistObjects;
+    // }
+    // });
+
+      model: function() {
+        var stuff = App.Post.find()
+        console.log(stuff)
+        return stuff
+      }
+    })
+
+    Anonypost.ApplicationController = Ember.Controller.extend({firstName: 'Alex', lastName: 'Lerman'})
+
+    App.TestRoute = Ember.Route.extend({
+      model: function() {
+        return this.store.find('post')
+      }
+    })
+
   </script>
 </head>
 <body>
-  <h1>Hi</h1>
+  <script type="text/x-handlebars">
+    <p>Before outlet</p>{{outlet}}<p>After outlet</p>
+  </script>
+
+  <script type="text/x-handlebars" data-template-name="posts">
+  {{#each model}}
+    <b>{{content}}</b>
+  {{/each}}
+  </script>
   <div id="posts"></div>
 </body>
 </html>

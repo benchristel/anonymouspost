@@ -19,7 +19,9 @@ class PostsController < ApplicationController
           PostsPresenter.new(post, @me)
         end
 
-        render :json => presenters
+        puts presenters.as_json
+
+        render :json => {posts: presenters}
       end
     end
   end
@@ -28,7 +30,7 @@ class PostsController < ApplicationController
   # GET /posts/1.json
   def show
     @post = Post.find(params[:id])
-    
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @post }
