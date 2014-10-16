@@ -14,7 +14,7 @@ module IntegrationHelpers
   included do
     after do
       if @schema && respond_to?(:response_body)
-        expect(response_body).to conform_to_schema @schema
+        expect(response_body).to conform_to_schema @schema.with_indifferent_access
       end
 
       if @status && respond_to?(:response)
@@ -23,7 +23,7 @@ module IntegrationHelpers
     end
 
     def response_body
-      JSON response.body
+      JSON(response.body).with_indifferent_access
     end
   end
 end
@@ -39,6 +39,7 @@ RSpec.configure do |config|
   end
 
   config.include IntegrationHelpers
+  config.include FactoryGirl::Syntax::Methods
 
   config.order = "random"
 end

@@ -34,6 +34,9 @@ end
 
 group :test do
   gem 'rspec-rails'
+  gem 'rspec'
+  gem 'factory_girl_rails'
+  gem 'hashema', '~> 0.0.2'
 
   # empty the database between test runs
   gem 'database_cleaner'
