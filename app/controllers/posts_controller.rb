@@ -4,6 +4,8 @@ class PostsController < ApplicationController
   end
 
   def create
+    puts "---------------"
+    puts request.content_type
     Post.create_from params
     head :created
   end

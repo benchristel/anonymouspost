@@ -2,10 +2,28 @@
 <html>
     <head>
         <title>Anonypost</title>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
         <script type="text/javascript">
+            "use strict"
 
+            var NewPost = function(content) {
+                var self = {post: {content: content}}
+                self.save = function() {
+                    $.post('/posts', '{"post":{"content":"'+content+'"}}')
+                }
+                return self
+            }
 
+            var PostView = function(post) {
+                var self = {post: post, appendTo: function(el) { $(el).append('<div class="post">'+post.content+"</div>") }}
+                return self
+            }
 
+            $.get('/posts', function(response) {
+                response.posts.forEach(function(post) {
+                    PostView(post).appendTo('body')
+                })
+            })
         </script>
     </head>
     <body x-ng-app="anonypost">
