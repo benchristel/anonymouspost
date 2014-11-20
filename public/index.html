@@ -6,10 +6,37 @@
         <script type="text/javascript">
             "use strict"
 
+            var web = {}
+
+            web.post = function(url, body, success) {
+              $.ajax({
+                  url: url,
+                  type: 'post',
+                  data: body,
+                  headers: {
+                    "Content-Type": "application/json"
+                  },
+                  dataType: 'json',
+                  success: success
+              });
+            }
+
+            web.get = function(url, success) {
+              $.ajax({
+                  url: url,
+                  type: 'get',
+                  headers: {
+                    "Content-Type": "application/json"
+                  },
+                  dataType: 'json',
+                  success: success
+              });
+            }
+
             var NewPost = function(content) {
                 var self = {post: {content: content}}
                 self.save = function() {
-                    $.post('/posts', '{"post":{"content":"'+content+'"}}')
+                    web.post('/posts', '{"post":{"content":"'+content+'"}}')
                 }
                 return self
             }
@@ -19,13 +46,30 @@
                 return self
             }
 
-            $.get('/posts', function(response) {
-                response.posts.forEach(function(post) {
-                    PostView(post).appendTo('body')
+            window.addEventListener('load', function() {
+                web.get('/posts', function(response) {
+                    response.posts.forEach(function(post) {
+                        PostView(post).appendTo('#post-list')
+                    })
+                })
+
+                $('#post-submit').click(function() {
+                  NewPost($('#post-input').val()).save()
+                  $('#post-input').val('')
                 })
             })
         </script>
+        <style type="text/css">
+            #post-submit {
+              border: 1px solid #ccc;
+              display: inline;
+              cursor: pointer;
+            }
+        </style>
     </head>
-    <body x-ng-app="anonypost">
+    <body>
+      <input type="text" id="post-input"></input>
+      <div id="post-submit">Poo</div>
+      <div id="post-list"></div>
     </body>
 </html
