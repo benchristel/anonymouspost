@@ -1,5 +1,6 @@
-class Edit < ActiveRecord::Base
-  belongs_to :editable
+class Edit
+  include Mongoid::Document
+  # belongs_to :editable
 
-  attr_accessible :content
+  # attr_accessible :content
 end

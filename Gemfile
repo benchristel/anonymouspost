@@ -1,46 +1,48 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.3'
+# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+gem 'rails', '4.0.0'
 
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
+# Use SCSS for stylesheets
+gem 'sass-rails', '~> 4.0.0'
 
-gem 'mysql2'
-gem 'twitter', '5.8.0'
-gem 'appconfig', :require => 'app_config'
+# Use MongoID as the ORM
+gem 'mongoid', '~> 4.0.0'
 
-# Gems used only for assets and not required
-# in production environments by default.
-group :assets do
-  gem 'sass-rails',   '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
+# Use Uglifier as compressor for JavaScript assets
+gem 'uglifier', '>= 1.3.0'
 
-  # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  # gem 'therubyracer', :platform => :ruby
+# Use CoffeeScript for .js.coffee assets and views
+gem 'coffee-rails', '~> 4.0.0'
 
-  gem 'uglifier', '>= 1.0.3'
-end
-
+# Use jquery as the JavaScript library
 gem 'jquery-rails'
 
-# To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
+# Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
+gem 'turbolinks'
 
-# To use Jbuilder templates for JSON
-# gem 'jbuilder'
+# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+gem 'jbuilder', '~> 1.2'
 
-# Use unicorn as the app server
-gem 'unicorn'
+gem 'twitter', '5.8.0'
 
-# Deploy with Capistrano
-# gem 'capistrano'
+gem 'appconfig', :require => 'app_config'
 
-# To use debugger
-# gem 'ruby-debug19', :require => 'ruby-debug'
+group :doc do
+  # bundle exec rake doc:rails generates the API under doc/api.
+  gem 'sdoc', require: false
+end
 
-group :development, :test do
+group :test do
   gem 'rspec-rails'
-  gem 'spring'
-  gem 'spring-commands-rspec'
+  gem 'rspec'
+  gem 'rspec-its'
+  gem 'factory_girl_rails'
+  gem 'hashema', '~> 0.0.2'
+
+  # empty the database between test runs
+  gem 'database_cleaner'
   gem 'timecop'
 end
+
+gem 'unicorn'

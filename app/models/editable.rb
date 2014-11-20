@@ -1,3 +1,4 @@
-class Editable < ActiveRecord::Base
-  has_many :edits
+class Editable
+  include Mongoid::Document
+  # has_many :edits
 end

@@ -38,7 +38,7 @@ describe PostsPresenter do
         :direction => :NW,
         :distance => {:meters=>44340.63813856269},
         :existing_vote => 0,
-        :id => nil,
+        :id => subject.id.to_s,
         :latitude => post_latitude,
         :longitude => post_longitude,
         :net_upvotes => 0,
@@ -52,7 +52,7 @@ describe PostsPresenter do
     let(:viewer_can_edit) { true }
     describe "the json" do
       subject { presenter.as_json }
-      its([:can_edit]) { should be_true }
+      its([:can_edit]) { should eq true }
     end
   end
 

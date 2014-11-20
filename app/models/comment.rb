@@ -1,22 +1,28 @@
-class Comment < ActiveRecord::Base
-  include Location
-  include Voting
+class Comment
+  include Mongoid::Document
 
-  attr_accessible :content, :latitude, :longitude, :user_key, :post, :parent
-  attr_accessor :user_hash
-  belongs_to :parent, :class_name => 'Comment', :foreign_key => :parent_comment_id
-  has_many :replies, :class_name => 'Comment', :foreign_key => :parent_comment_id
-  belongs_to :post, :foreign_key => :original_post_id
+  has_many :replies, class_name: 'Comment'
+  belongs_to :parent, class_name: 'Comment'
+  belongs_to :post
+
+  # include Location
+  # include Voting
+
+  # attr_accessible :content, :latitude, :longitude, :user_key, :post, :parent
+  # attr_accessor :user_hash
+  # belongs_to :parent, :class_name => 'Comment', :foreign_key => :parent_comment_id
+  # has_many :replies, :class_name => 'Comment', :foreign_key => :parent_comment_id
+  # belongs_to :post, :foreign_key => :original_post_id
 
 
-  validates_presence_of :timestamp
-  validates_presence_of :thread_user_hash, :original_post_id
-  validates_length_of :thread_user_hash, :minimum => 64, :maximum => 64
+  # validates_presence_of :timestamp
+  # validates_presence_of :thread_user_hash, :original_post_id
+  # validates_length_of :thread_user_hash, :minimum => 64, :maximum => 64
   #validates :longitude, :numericality => { :greater_than_or_equal_to => -180, :less_than_or_equal_to => 180 }
   #validates :latitude, :numericality => { :greater_than_or_equal_to => -90, :less_than_or_equal_to => 90 }
-  validates :timestamp, :numericality => true
+  # validates :timestamp, :numericality => true
 
-  before_validation :before_validation_cb
+  # before_validation :before_validation_cb
   def before_validation_cb
     if timestamp.nil?
       self.timestamp = Time.new.to_i

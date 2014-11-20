@@ -11,6 +11,7 @@ class PostsPresenter
   def as_json(options={})
     post.as_json.tap { |json|
       json.merge!(
+        :id            => post.id.to_s,
         :distance      => {:meters => distance_meters},
         :direction     => direction,
         :can_edit      => viewer.can_edit?(post),

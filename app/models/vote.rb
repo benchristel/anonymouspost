@@ -1,9 +1,10 @@
-class Vote < ActiveRecord::Base
-  attr_accessible :uid, :value, :referendum
+class Vote
+  include Mongoid::Document
+  # attr_accessible :uid, :value, :referendum
 
-  belongs_to    :referendum
-  after_save    :save_referendum
-  after_destroy :save_referendum
+  # belongs_to    :referendum
+  # after_save    :save_referendum
+  # after_destroy :save_referendum
 
   def self.total
     sum(:value)

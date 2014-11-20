@@ -1,39 +1,62 @@
-class Post < ActiveRecord::Base
+class Post
+  include Mongoid::Document
+  include Mongoid::Timestamps
   include Location
   include Caches
-  include Voting
+  # include Voting
 
-  attr_accessible :content, :latitude, :longitude, :user_key, :tweet_id
+  field :content, type: String
+  field :user_hash, type: String
+  field :timestamp, type: Integer
+  field :longitude, type: Rational
+  field :latitude, type: Rational
+  field :created_at, type: Time
+  field :tweet_id, type: Integer
+  field :referendum_id, type: Integer
+  field :editable_id, type: Integer
 
-  has_many  :comments, :foreign_key => :original_post_id
+  has_many :tags
 
-  has_and_belongs_to_many :tags
-  validates_presence_of :timestamp
-  validates_presence_of :user_hash
-  validates_length_of :user_hash, :minimum => 64, :maximum => 64
-  validates :longitude, :numericality => { :greater_than_or_equal_to => -180, :less_than_or_equal_to => 180 }
-  validates :latitude, :numericality => { :greater_than_or_equal_to => -90, :less_than_or_equal_to => 90 }
-  validates :timestamp, :numericality => true
+  def comments
+    []
+  end
+
+  def vote_total
+    0
+  end
+
+  #
+  # attr_accessible :content, :latitude, :longitude, :user_key, :tweet_id
+
+  # has_many  :comments, :foreign_key => :original_post_id
+
+  # has_and_belongs_to_many :tags
+  # validates_presence_of :timestamp
+  # validates_presence_of :user_hash
+  # validates_length_of :user_hash, :minimum => 64, :maximum => 64
+  # validates :longitude, :numericality => { :greater_than_or_equal_to => -180, :less_than_or_equal_to => 180 }
+  # validates :latitude, :numericality => { :greater_than_or_equal_to => -90, :less_than_or_equal_to => 90 }
+  # validates :timestamp, :numericality => true
 
   # editable stuff
-  belongs_to :editable
-  has_many  :edits, :through => :editable
-  after_initialize :initialize_editable
-  def initialize_editable
-    self.editable ||= Editable.new
-  end
-  before_create :save_editable
-  def save_editable
-    editable.save
-  end
+  # belongs_to :editable
+  # has_many  :edits, :through => :editable
+  # after_initialize :initialize_editable
+  # def initialize_editable
+  #   self.editable ||= Editable.new
+  # end
+  # before_create :save_editable
+  # def save_editable
+  #   editable.save
+  # end
 
-  before_validation :before_validation_cb
-  def before_validation_cb
-    if new_record?
-      self.timestamp = Time.new.to_i
-      set_user_hash
-    end
-  end
+  # before_validation :before_validation_cb
+  # def before_validation_cb
+  #   if new_record?
+  #     self.timestamp = Time.new.to_i
+  #     set_user_hash
+  #   end
+  # end
 
   def content=(new_content)
     super(LinkHighlighter.new(HtmlSanitizer.new(new_content)).to_s)
@@ -139,5 +162,4 @@ class Post < ActiveRecord::Base
       end
     end[0]
   end
-
 end

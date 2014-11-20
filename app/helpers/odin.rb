@@ -101,11 +101,11 @@ class Odin
 
   private
   def vote(post_id, direction)
-    ActiveRecord::Base.transaction do
+    # ActiveRecord::Base.transaction do
       Post.find(post_id).tap do |post|
         delta = Vote.vote!(user.key, post.referendum, direction)
       end
-    end
+    # end
   end
 
   private

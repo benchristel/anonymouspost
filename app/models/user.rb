@@ -1,11 +1,11 @@
-class User < ActiveRecord::Base
+class User
   include Viewer
 
-  attr_accessible :key, :key_hash
-  attr_accessor :key
+  # attr_accessible :key, :key_hash
+  # attr_accessor :key
 
-  validates_presence_of :key_hash
-  validates_length_of :key_hash, :minimum => 64, :maximum => 64
+  # validates_presence_of :key_hash
+  # validates_length_of :key_hash, :minimum => 64, :maximum => 64
 
   def self.create_by_key(key)
     User.create(:key_hash  => Encryption.sha(key)).tap do |user|
